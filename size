@@ -1,0 +1,48 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: size [-b] [-d maxdepth] [-k] [-m] [-s] [dir]";
+            echo "            bytes               KB   MB"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   size [-b] [-d maxdepth] [-g] [-k] [-m] [dir]                     #
+###                                                                            #
+### Purpose:  Show directory size                                              #
+###                                                                            #
+### Args:     b shows size in bytes (default is human-readable)                #
+###           maxdepth is how many levels of subdirectories should be recursed #
+###             into (default is 0)                                            #
+###           g shows size in gigabytes (default is human-readable)            #
+###           k shows size in kilobytes (default is human-readable)            #
+###           m shows size in megabytes (default is human-readable)            #
+###           s sorts the output by dir size (default is alphabetical order)   #
+###           dir is a directory whose size should be shown                    #
+###                                                                            #
+### Notes:    All values are rounded up                                        #
+###                                                                            #
+### Returns:  Directory size is shown on screen                                #
+###                                                                            #
+################################################################################
+
+units=-bh
+depth=
+sortargs=-k2
+while getopts "bd:gkms" A; do
+  case $A in
+    b) units=-b;;
+    d) depth=$OPTARG;;
+    g) units=--block-size=1G;;
+    k) units=-bk;;
+    m) units=-bm;;
+    s) sortargs=-hr;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ -n $1 ]]; then
+  # Default depth=0 if user passes 'dir'
+  du $units --max-depth=${depth:-0} "$1" | sort $sortargs
+else
+  # Default depth=1 if user passes no 'dir', del last line
+  du $units --max-depth=${depth:-1} | sed '$d' | sort $sortargs
+fi

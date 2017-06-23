@@ -1,0 +1,36 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: htmltidy [-l] [-w] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   htmltidy [-l] [-w] file                                          #
+###                                                                            #
+### Purpose:  Validate HTML with screen report (default) or create out.html    #
+###                                                                            #
+### Args:     l uses Latin-1 encoding for input and output                     #
+###           w creates out.html file in current directory                     #
+###           file is the HTML file to validate                                #
+###                                                                            #
+### Requires: tidy                                                             #
+###                                                                            #
+### Returns:  Shows report, or writes out.html file in current directory if -w #
+###                                                                            #
+################################################################################
+
+encoding=-utf8
+tidyargs=-e
+while getopts "lw" A; do
+  case $A in
+    l) encoding=-latin1;;
+    w) tidyargs=-o out.html -i -wrap 123 -c -b -q;;
+  esac
+done
+shift $((OPTIND-1))
+
+# tidyargs is either "-e" or "-o out.html -i -wrap 123 -c -b -q", and in both
+# cases we append encoding
+tidyargs="$tidyargs $encoding"
+
+tidy $tidyargs $1

@@ -1,0 +1,26 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pdfselect file pages [options]"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pdfselect file pages [options]                                   #
+###                                                                            #
+### Purpose:  Extract pages from PDF document                                  #
+###                                                                            #
+### Args:     file is the file to process                                      #
+###           pages is a space-separated list of pages, like 2 4-end           #
+###           options are passed to pdftk                                      #
+###                                                                            #
+### Notes:    See pdftk --help                                                 #
+###                                                                            #
+### Requires: pdftk                                                            #
+###                                                                            #
+### Returns:  Creates file out.pdf in current directory                        #
+###                                                                            #
+################################################################################
+
+file=$1; shift
+
+pdftk "$file" cat $@ output out.pdf

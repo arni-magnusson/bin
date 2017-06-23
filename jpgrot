@@ -1,0 +1,35 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: jpgrot [-d deg] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   jpgrot [-d deg] file                                             #
+###                                                                            #
+### Purpose:  Lossless jpeg rotation                                           #
+###                                                                            #
+### Args:     deg is the number of degrees to rotate (default 90)              #
+###                                                                            #
+### Notes:    Writes backup rot.jpg in $TMPDIR                                 #
+###                                                                            #
+### Warning:  Original file is overwritten                                     #
+###                                                                            #
+### Requires: jpegtran                                                         #
+###                                                                            #
+### Returns:  Rotates and overwrites jpeg file                                 #
+###                                                                            #
+################################################################################
+
+deg=90
+while getopts "d:" A; do
+  case $A in
+    d) deg=$OPTARG;;
+  esac
+done
+shift $((OPTIND-1))
+
+backup=$TMPDIR/rot.jpg
+
+jpegtran -rotate $deg $1 > $backup
+cp -f $backup $1

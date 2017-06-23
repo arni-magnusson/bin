@@ -1,0 +1,47 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: backup [-x] from to"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   backup [-x] from to                                              #
+###                                                                            #
+### Purpose:  Synchronize directory A->B using rsync                           #
+###                                                                            #
+### Args:     x confirms the action (default is to report files that would be  #
+###             affected)                                                      #
+###           from is source dir (A)                                           #
+###           to is destination dir (B)                                        #
+###                                                                            #
+### Notes:    Equivalent to removing B and then copying A to B, except newer   #
+###             files are not overwritten with older                           #
+###           The opposite of the 'backdown' command                           #
+###           Useful to upload recent work to a remote backup site             #
+###                                                                            #
+### Returns:  Directories A and B are identical, except B may contain newer    #
+###             files (check with 'backdown')                                  #
+###                                                                            #
+################################################################################
+
+sure=no
+while getopts "x" A; do
+  case $A in
+    x) sure=yes;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ -z "$@" ]]; then
+  source=~/core
+  dest=hafurtask.hafro.is:core
+else
+  source=$1
+  dest=$2
+fi
+
+if [[ $sure == "no" ]]; then
+  # Remove ./ line from report
+  rsync -ni --out-format "%n%L" -auz --del $source/ $dest/ | sed '/^\.\/$/d'
+else
+  rsync -auz --del $source/ $dest/
+fi

@@ -1,0 +1,69 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help=\
+'echo "Usage: auctex [-c(ompile)] [-v(iew)] [-s(weave)] [-p a4/letter] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   auctex [-c] [-v] [-s] [-p paper] file                            #
+###                                                                            #
+### Purpose:  Compile or view LaTeX document from Emacs                        #
+###                                                                            #
+### Args:     c converts document to PDF format                                #
+###           v invokes PDF viewer                                             #
+###           s sweaves Rnw to PDF                                             #
+###           paper is the paper size, a4 (default) or letter                  #
+###           file is the TeX file in current Emacs buffer                     #
+###                                                                            #
+### Requires: dvips, ghostview, gs, latex, latexmk, R                          #
+###                                                                            #
+### Example:  C-c C-c, C-c C-v, C-c C-z                                        #
+###                                                                            #
+### Returns:  Creates PDF file with same prefix in current directory if -c or  #
+###             -s, otherwise null                                             #
+###                                                                            #
+################################################################################
+
+action=help
+dviargs=
+gsargs=
+while getopts "ckp:sv" A; do
+  case $A in
+    c) action=compile;;
+    k) action=knit;;
+    p) dviargs="-t $OPTARG"; gsargs="-sPAPERSIZE=$OPTARG";;
+    s) action=sweave;;
+    v) action=view;;
+  esac
+done
+shift $((OPTIND-1))
+
+dviargs="$dviargs -P pdf"
+gsargs="$gsargs -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress \
+-dCompatibilityLevel=1.4 -dSAFER -q -o"
+# Rargs="--no-init-file --slave"
+tex="${1%.*}".tex
+dvi="${1%.*}".dvi
+ps="${1%.*}".ps
+pdf="${1%.*}".pdf
+Rnw=`basename "$1"`
+Rnwpdf="${Rnw/%.Rnw/.pdf}"
+dir=`dirname "$1"`
+
+case $action in
+  compile) latex $tex; dvips $dviargs $dvi; gs $gsargs $pdf $ps;;
+  help) help;;
+  knit) if [[ "${1##*.}" == .tex ]]; then
+          echo "Error: knitr file should not be named .tex"; exit
+        fi
+    cd $dir; Rscript --vanilla -e "library(knitr);knit('$Rnw')"
+    latexmk -g -pdf $tex;;
+  sweave) if [[ "${1##*.}" == .tex ]]; then
+            echo "Error: sweave file should not be named .tex"; exit
+          fi
+          cd $dir
+          Rscript --vanilla -e "Sweave('$Rnw',debug=TRUE,encoding='UTF-8')"
+    latexmk -g -pdf $tex;;
+  view) if [[ -f $pdf ]]; then ghostview $pdf; else ghostview $Rnwpdf; fi;;
+esac

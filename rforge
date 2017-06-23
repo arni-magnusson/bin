@@ -1,0 +1,35 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: rforge [-e] PKG"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:  rforge [-e] PKG                                                   #
+###                                                                            #
+### Purpose: Checkout R-Forge package without typing                           #
+###          svn co svn+ssh://scm.r-forge.r-project.org/svnroot/PKG/pkg PKG    #
+###                                                                            #
+### Args:    -e means export instead of checkout                               #
+###          PKG is the name of an R-Forge package                             #
+###                                                                            #
+### Returns: Creates directory PKG, or does nothing if directory PKG exists    #
+###            already                                                         #
+###                                                                            #
+################################################################################
+
+action=co
+while getopts "e" A; do
+  case $A in
+    e) action=export;;
+  esac
+done
+shift $((OPTIND-1))
+
+pkg=`echo $1 | tr [:upper:] [:lower:]`
+
+if [[ -e $pkg ]]; then echo \'$pkg\' exists already, checkout aborted; exit; fi
+
+CMD="svn $action svn+ssh://scm.r-forge.r-project.org/svnroot/$pkg/pkg $1"
+echo $CMD
+eval $CMD

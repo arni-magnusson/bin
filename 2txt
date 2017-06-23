@@ -1,0 +1,39 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: 2txt [options] file"; echo;
+            echo "Try these options for PDF: -layout, -raw"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   2txt [options] file                                              #
+###                                                                            #
+### Purpose:  Convert DOC, HTML, PDF, PS, or TEX file to TXT format            #
+###                                                                            #
+### Args:     Options are passed on to antiword or pdftotext                   #
+###                                                                            #
+### Notes:    Try these options for PDF: -layout, -raw                         #
+###                                                                            #
+### Requires: antiword, gs, lynx, pdftotext                                    #
+###                                                                            #
+### Returns:  Creates TXT file with same prefix in current directory           #
+###                                                                            #
+################################################################################
+
+userargs=
+while (($#>1)); do
+  userargs="$userargs $1"
+  shift
+done
+
+gsargs="-dSIMPLE ps2ascii.ps -q -dBATCH -dSAFER"
+lynxargs="-dump -nolist -width 123"
+txt="${1%.*}".txt
+from="${1##*.}"
+
+case $from in
+  doc ) antiword $userargs $1 > $txt;;
+  html) lynx $lynxargs $1 > $txt;;
+  pdf ) pdftotext $userargs $1 $txt;;
+  ps  ) gs $gsargs $1 > $txt;;
+esac

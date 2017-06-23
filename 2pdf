@@ -1,0 +1,58 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: 2pdf [-f] [-g] [-p paper] [-q quality] file"; echo;
+            echo "Quality settings: screen, ebook, printer, prepress, default.";
+            echo; echo "Use -f to prevent JPEG artifacts on embedded bitmaps."'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   2pdf [-f] [-g] [-p paper] [-q quality] file                      #
+###                                                                            #
+### Purpose:  Convert DVI, PDF, PS/EPS, TEX/DTX, TEXI/TEXINFO/TXI file to PDF  #
+###             format                                                         #
+###                                                                            #
+### Args:     f selects flate compression, to prevent JPEG artifacts on        #
+###             embedded bitmaps                                               #
+###           g produces grayscale output                                      #
+###           paper selects PDF page size, a4 or letter when converting DVI or #
+###             PS file                                                        #
+###           quality determines image quality (screen, ebook, printer,        #
+###             prepress, default)                                             #
+###           file is file to convert                                          #
+###                                                                            #
+### Requires: convert, dvipdfm, gs, texi2dvi                                   #
+###                                                                            #
+### Returns:  Creates PDF file with same prefix in current directory, or       #
+###             out.pdf if input file was PDF                                  #
+###                                                                            #
+################################################################################
+
+quality=prepress
+while getopts "fgp:q:" A; do
+  case $A in
+    f) gsargs="$gsargs -dAutoFilterColorImages=false \
+-dColorImageFilter=/FlateEncode";;
+    g) gsargs="$gsargs -sColorConversionStrategy=Gray \
+-sProcessColorModel=DeviceGray -dOverrideICC";;
+    p) dviargs="-p $OPTARG"; gsargs="$gsargs -sPAPERSIZE=$OPTARG";;
+    q) quality=$OPTARG;;
+  esac
+done
+shift $((OPTIND-1))
+
+gsargs="$gsargs -sDEVICE=pdfwrite -dEPSCrop -dPDFSETTINGS=/$quality \
+-dCompatibilityLevel=1.4 -dSAFER -q -o"
+texargs="-c -p"
+texiargs="-c -p -t @finalout"
+pdf="${1%.*}".pdf
+from="${1##*.}"
+
+case $from in
+  dvi             ) dvipdfm $dviargs "$1";;
+  pdf             ) gs $gsargs"${1%.*}"_.pdf "$1";;
+  ps|eps          ) gs $gsargs$pdf "$1";;
+  tex|dtx         ) texi2dvi $texargs "$1";;
+  texi|texinfo|txi) texi2dvi $texiargs "$1";;
+  *               ) convert "$1" "$pdf";;
+esac

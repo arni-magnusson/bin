@@ -1,0 +1,31 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pdfclean file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pdfclean file                                                    #
+###                                                                            #
+### Purpose:  Replace PDF stamp like '(Downloaded by ...)' with spaces         #
+###                                                                            #
+### Args:     file is a PDF document                                           #
+###                                                                            #
+### Notes:    Writes backup clean.pdf in $TMPDIR                               #
+###                                                                            #
+### Requires: qpdf, Emacs with Lisp function `pdf-clean' in .emacs             #
+###                                                                            #
+### Returns:  Overwrites original PDF file, after removing stamps              #
+###                                                                            #
+################################################################################
+
+backup=$TMPDIR/clean.pdf
+clean="${1%.*}"_clean.pdf
+
+cp "$1" $backup
+# pdftk "$1" output "$clean" uncompress
+qpdf --stream-data=uncompress "$1" "$clean" 2> /dev/null
+emacs "$clean" -nw --eval "(pdf-clean)" --eval "(save-buffers-kill-terminal t)"
+# pdftk "$clean" output "$1" compress
+qpdf "$clean" "$1"
+rm "$clean"

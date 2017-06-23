@@ -1,0 +1,28 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: www [path]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   www [path]                                                       #
+###                                                                            #
+### Purpose:  Make file or directory contents readable for all, by recursively #
+###             applying chmod 755 and 644                                     #
+###                                                                            #
+### Args:     path is a directory (default is ~/www)                           #
+###                                                                            #
+### Requires: chmod, find                                                      #
+###                                                                            #
+### Returns:  Modifies permissions so all dirs are 755 and files are 644       #
+###                                                                            #
+################################################################################
+
+if [[ -f $1 ]]; then
+  chmod 644 $1
+elif [[ -n $1 ]]; then
+  find $1 -type d -exec chmod 755 {} \;
+  find $1 -type f -exec chmod 644 {} \;
+else
+  find ~/www/. -type d -exec chmod 755 {} \;
+  find ~/www/. -type f -exec chmod 644 {} \;
+fi

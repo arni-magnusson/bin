@@ -1,0 +1,16 @@
+#!/bin/bash
+shopt -s expand_aliases
+################################################################################
+###                                                                            #
+### Script:   o [file]                                                         #
+###                                                                            #
+### Purpose:  Open Okular as a separate process, without typing ampersand      #
+###             after the filename                                             #
+###                                                                            #
+### Requires: o                                                                #
+###                                                                            #
+### Returns:  Okular                                                           #
+###                                                                            #
+################################################################################
+
+okular "$@" &

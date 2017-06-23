@@ -1,0 +1,39 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: allusers [-f] [-w width]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   allusers [-f] [-w width]                                         #
+###                                                                            #
+### Purpose:  Show all users, as reported by 'lastlog'                         #
+###                                                                            #
+### Args:     f shows full names, not only user name                           #
+###           width is table width before shrinking with column -t             #
+###                                                                            #
+### Requires: lastlog                                                          #
+###                                                                            #
+### Returns:  User names line by line, or in columns if -w was passed          #
+###                                                                            #
+################################################################################
+
+full=0
+width=0
+while getopts "fw:" A; do
+  case $A in
+    f) full=1;;
+    w) width=$OPTARG;;
+  esac
+done
+shift $((OPTIND-1))
+
+if ((full == 1)); then
+  lastlog | sed '1d' | sed '/\$/d' | gawk '{print $1}' | sort -u | \
+xargs finger -m | sed -n '/^Login: /p' | sed 's/Login: //' | \
+sed 's/Name: //' | sed 's/\t//g'
+elif ((width > 0)); then
+  lastlog | sed '1d' | sed '/\$/d' | gawk '{print $1}' | sort -u | \
+column -c $2 | column -t
+else
+  lastlog | sed '1d' | sed '/\$/d' | gawk '{print $1}' | sort -u
+fi

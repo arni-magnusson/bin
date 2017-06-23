@@ -1,0 +1,20 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: hafput file(s)"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   hafput file(s)                                                   #
+###                                                                            #
+### Purpose:  Send file to Hafurtask                                           #
+###                                                                            #
+### Args:     file is the file to send                                         #
+###                                                                            #
+### Requires: scp                                                              #
+###                                                                            #
+### Returns:  Sends file to Hafurtask                                          #
+###                                                                            #
+################################################################################
+
+scp -p "$*" hafurtask.hafro.is:

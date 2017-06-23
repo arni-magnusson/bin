@@ -1,0 +1,42 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: 2eps [-d dpi] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   2eps [-d dpi] file                                               #
+###                                                                            #
+### Purpose:  Convert bitmap, PS, or PDF file to EPS format                    #
+###                                                                            #
+### Args:     dpi is output resolution when converting PS file                 #
+###           file is file to convert                                          #
+###                                                                            #
+### Notes:    PS->EPS gives spline-traced output, consider using PS->PDF->EPS  #
+###             for exact output                                               #
+###                                                                            #
+### Requires: pnmtops, convert, gs                                             #
+###                                                                            #
+### Returns:  Creates EPS file with same prefix in current directory           #
+###                                                                            #
+################################################################################
+
+while getopts "d:" A; do
+  case $A in
+    d) gsargs="-r$OPTARG"; pnmargs="-dpi=$OPTARG";;
+  esac
+done
+shift $((OPTIND-1))
+
+pdfargs=-eps
+pnmargs="$pnmargs -level 3 -nocenter -noturn"
+gsargs="$gsargs -sDEVICE=epswrite -dSAFER -q -o"
+eps="${1%.*}".eps
+from="${1##*.}"
+
+case $from in
+  pdf) pdftops $pdfargs $1;;
+  pnm) pnmtops $pnmargs $1>$eps;;
+  ps ) gs $gsargs $eps $1;;
+  *  ) convert $1 pnm:- | pnmtops $pnmargs > $eps;;
+esac

@@ -1,0 +1,20 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pcrop file B:L T:R"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pcrop file B:L T:R                                               #
+###                                                                            #
+### Purpose:  Crop PDF document                                                #
+###                                                                            #
+### Args:     file is file to crop                                             #
+###                                                                            #
+### Requires: sejda-console                                                    #
+###                                                                            #
+### Returns:  Creates out.pdf in same directory                                #
+###                                                                            #
+################################################################################
+
+sejda-console crop -f "$1" -o out.pdf --cropAreas [$2][$3] --overwrite

@@ -1,0 +1,28 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help=\
+'echo "Usage: diffme [--left] [--suppress-common] [-W width] file1 file2"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   diffme [--left] [--suppress-common] [-W width] file1 file2       #
+###                                                                            #
+### Purpose:  Show differences between two files, arranged in two columns      #
+###                                                                            #
+### Args:     left shows entire file1 in left column, and only file2 diffs in  #
+###             right column                                                   #
+###           suppress shows only diffs in each columns                        #
+###           W is width of each column                                        #
+###           file1 and file2 are files to compare                             #
+###                                                                            #
+### Notes:    Thin wrapper to remind user about three helpful options for      #
+###             2-column display                                               #
+###                                                                            #
+### Requires: diff                                                             #
+###                                                                            #
+### Returns:  File differences                                                 #
+###                                                                            #
+################################################################################
+
+diff -y $@

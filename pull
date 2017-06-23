@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pull [dir]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pull [dir]                                                       #
+###                                                                            #
+### Purpose:  Update Git working directory                                     #
+###                                                                            #
+### Args:     dir is a Git working directory                                   #
+###                                                                            #
+### Notes:    Useful to update many working directories                        #
+###                                                                            #
+### Requires: git                                                              #
+###                                                                            #
+### Returns:  Working dir is updated, pulling new files from remote repository #
+###                                                                            #
+################################################################################
+
+if [[ -z $1 ]]; then dir=.; else dir=$1; fi
+
+pushd "$dir" > /dev/null
+git pull
+popd > /dev/null

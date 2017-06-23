@@ -1,0 +1,32 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: lorem [-1]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   lorem [-1]                                                       #
+###                                                                            #
+### Purpose:  Show dummy paragraphs "Lorem ipsum ..."                          #
+###                                                                            #
+### Args:     arg is the number of paragraphs (default 1, max 52)              #
+###                                                                            #
+### Warning:  If redirecting, make sure there is space before > sign           #
+###                                                                            #
+### Requires: lynx                                                             #
+###                                                                            #
+### Returns:  Shows text on screen                                             #
+###                                                                            #
+################################################################################
+
+if [[ -z $1 ]]; then
+  n=1
+else
+  n="${1//-/}"
+fi
+if ((n > 52)); then
+  n=52
+fi
+last=$((-1 + 2*n))
+
+lynx -source http://desktoppub.about.com/library/weekly/lorem.txt | dos2unix | \
+sed -n "1,${last}p"

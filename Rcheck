@@ -1,0 +1,37 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: Rcheck [-r] PKG"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   Rcheck [-r] PKG                                                  #
+###                                                                            #
+### Purpose:  Check R package without typing                                   #
+###           env _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE R --vanilla CMD check   #
+###             --as-cran PKG_x.y-z.tar.gz                                     #
+###                                                                            #
+### Args:     r connects to remote CRAN server for a full --as-cran check      #
+###             (takes a long time)                                            #
+###           PKG is an R package directory                                    #
+###                                                                            #
+### Requires: R                                                                #
+###                                                                            #
+### Returns:  Checks package and creates PKG.Rcheck directory                  #
+###                                                                            #
+################################################################################
+
+remote=FALSE
+while getopts "r" A; do
+  case $A in
+    r) remote=TRUE;;
+  esac
+done
+shift $((OPTIND-1))
+
+# Look for PKG_x.y-z.tar.gz (highest version if many are found)
+targz=`ls -mr $1_*`
+targz=`echo $targz | sed 's/,.*//'`
+
+env _R_CHECK_CRAN_INCOMING_REMOTE_=$remote R --vanilla CMD check --as-cran \
+$targz

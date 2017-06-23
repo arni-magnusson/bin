@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: color N"; echo;
+            echo "1=bold, 4=underline, 7=inverse, 31=red, 34=blue, \
+\"7;31\"=invred, \"7;34\"=invblue"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:  color                                                             #
+###                                                                            #
+### Purpose: Show color                                                        #
+###                                                                            #
+### Args:    N is an ISO 6429 color code                                       #
+###                                                                            #
+### Notes:   See man dir_colors and bash.doc for color code examples           #
+###          1=bold, 4=underline, 7=inverse, 31=red, 34=blue                   #
+###                                                                            #
+### Returns: Shows directory "home/" in color on screen                        #
+###                                                                            #
+################################################################################
+
+export LS_COLORS="di=$1"
+cd /
+ls -F --color -d home

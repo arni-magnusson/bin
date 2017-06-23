@@ -1,0 +1,23 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pdfmerge files [options]"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pdfmerge files [options]                                         #
+###                                                                            #
+### Purpose:  Merge PDF documents                                              #
+###                                                                            #
+### Args:     files is a space-separated list of files                         #
+###           options are passed to pdftk                                      #
+###                                                                            #
+### Notes:    See pdftk --help                                                 #
+###                                                                            #
+### Requires: pdftk                                                            #
+###                                                                            #
+### Returns:  Creates file out.pdf in current directory                        #
+###                                                                            #
+################################################################################
+
+pdftk "$@" output out.pdf

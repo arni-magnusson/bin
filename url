@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: url [dir]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   url [dir]                                                        #
+###                                                                            #
+### Purpose:  Show URL of a Git working directory                              #
+###                                                                            #
+### Args:     dir is a Git working directory                                   #
+###                                                                            #
+### Notes:    Useful to explore many working directories                       #
+###                                                                            #
+### Requires: git                                                              #
+###                                                                            #
+### Returns:  Working directory URL is shown on screen                         #
+###                                                                            #
+################################################################################
+
+if [[ -z $1 ]]; then dir=.; else dir=$1; fi
+
+pushd "$dir" > /dev/null
+git config --get remote.origin.url
+popd > /dev/null

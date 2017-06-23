@@ -1,0 +1,48 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: zipme [-b] [-g] [-x] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   zipme [-b] [-g] [-x] file                                        #
+###                                                                            #
+### Purpose:  Zip directory or file to BZ2, GZ, TAR.BZ2, TAR.GZ, TAR.XZ, XZ,   #
+###             or ZIP (default) format                                        #
+###                                                                            #
+### Args:     b creates BZ2 or TAR.BZ2 file                                    #
+###           g creates GZ or TAR.GZ file                                      #
+###           x creates XZ or TAR.XZ file                                      #
+###           file is directory or file to zip                                 #
+###                                                                            #
+### Requires: bzip2, gzip, tar, xz, zip                                        #
+###                                                                            #
+### Returns:  Creates zipped file with same prefix in current directory        #
+###                                                                            #
+################################################################################
+
+method=zip
+while getopts "bgx" A; do
+  case $A in
+    b) method=bzip2;;
+    g) method=gzip;;
+    x) method=xz;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ -f "$1" ]]; then  # file
+  case $method in
+    bzip2) bzip2 -k "$1";;
+    gzip)  gzip -c "$1">"$1.gz";;
+    xz)    xz -k "$1";;
+    zip)   zip -q "${1%.*}.zip" "$1";;  # strip file ending
+  esac
+elif [[ -d "$1" ]]; then  # directory
+  case $method in
+    bzip2) tar -cjf "${1%/}.tar.bz2" "$1";;  # strip trailing /
+    gzip)  tar -czf "${1%/}.tar.gz" "$1";;   # "
+    xz)    tar -cJf "${1%/}.tar.xz" "$1";;   # "
+    zip)   zip -qr "${1%/}.zip" "$1";;       # "
+  esac
+fi

@@ -1,0 +1,23 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pselect file pages"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pselect file pages                                               #
+###                                                                            #
+### Purpose:  Extract pages from PDF document                                  #
+###                                                                            #
+### Args:     file is the file to process                                      #
+###           pages is a comma-separated page range, e.g. 4-5,8-               #
+###                                                                            #
+### Requires: sejda-console                                                    #
+###                                                                            #
+### Returns:  Creates out.pdf in current directory                             #
+###                                                                            #
+################################################################################
+
+file=$1; shift
+
+sejda-console extractpages -f "$file" -o out.pdf -s $@ --overwrite

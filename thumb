@@ -1,0 +1,58 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: thumb -q quality -r rotate -s size [-w] [-h] file";
+            echo; echo "Suggested -s values: \
+1600  1440  1200  1000  800  640  480  400  320  240  200  160";
+            echo "                     \
+1200  1080   900   750  600  480  360  300  240  180  150  120"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   thumb -q quality -r rotate -s size [-w] [-h] file                #
+###                                                                            #
+### Purpose:  Create an image thumbnail                                        #
+###                                                                            #
+### Args:     quality is jpeg compression quality (0-100)                      #
+###           rotate is degrees to rotate                                      #
+###           size is maximum dimension of thumbnail                           #
+###           width forces thumbnail width=size                                #
+###           height forces thumbnail height=size                              #
+###           file is image to process                                         #
+###                                                                            #
+### Notes:    Suggested -s values:                                             #
+###           1600  1440  1200  1000  800  640  480  400  320  240  200  160   #
+###           1200  1080   900   750  600  480  360  300  240  180  150  120   #
+###                                                                            #
+### Requires: convert                                                          #
+###                                                                            #
+### Returns:  Creates image file with same name and thumb_ prefix in current   #
+###             directory                                                      #
+###                                                                            #
+################################################################################
+
+quality=90
+rotate=0
+size=800
+dimension=either
+while getopts "q:r:s:wh" A; do
+  case $A in
+    q) quality=$OPTARG;;
+    r) rotate=$OPTARG;;
+    s) size=$OPTARG;;
+    w) dimension=width;;
+    h) dimension=height;;
+  esac
+done
+shift $((OPTIND-1))
+
+thumbfile="${1%.*}_$size.${1##*.}"
+
+case $dimension in
+  either) convert -quality $quality -size ${size}x${size} \
+-resize ${size}x${size} -rotate $rotate $1 $thumbfile;;
+  width ) convert -quality $quality -size ${size}         \
+-resize ${size}         -rotate $rotate $1 $thumbfile;;
+  height) convert -quality $quality -size        x${size} \
+-resize        x${size} -rotate $rotate $1 $thumbfile;;
+esac

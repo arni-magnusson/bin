@@ -1,0 +1,42 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: apply [-q] '\''filter'\'' cmd"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:  apply [-q] 'filter' cmd                                           #
+###                                                                            #
+### Purpose: Apply command to many files in current directory                  #
+###                                                                            #
+### Args:    q means quiet, suppress echo of filenames                         #
+###          'filter' is a single-quoted filter, like '*.png'                  #
+###          cmd is a command, like 2jpg -q 100                                #
+###                                                                            #
+### Notes:   Thin for-loop wrapper                                             #
+###          Subdirs are ignored                                               #
+###                                                                            #
+### Returns: Applies command to all files in current directory                 #
+###                                                                            #
+################################################################################
+
+# Expand tilde to apply commands stored in ~/bin
+PATH=`echo $PATH | sed "s%~%$HOME%g"`
+
+quiet=0
+while getopts "q" A; do
+  case $A in
+    q) quiet=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+filter="$1"
+shift
+cmd="$*"
+
+if [[ $quiet == 0 ]]; then
+  find $filter -maxdepth 0 -exec echo {} \; -exec $cmd {} \;
+else
+  find $filter -maxdepth 0 -exec $cmd {} \;
+fi

@@ -1,0 +1,23 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pdfu file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pdfu file                                                        #
+###                                                                            #
+### Purpose:  Uncompress PDF document                                          #
+###                                                                            #
+### Args:     file is file to uncompress                                       #
+###                                                                            #
+### Requires: qpdf                                                             #
+###                                                                            #
+### Returns:  Creates filename_u.pdf in same directory                         #
+###                                                                            #
+################################################################################
+
+pdf="${1%.*}"_u.pdf
+
+# pdftk "$1" output "$pdf" uncompress
+qpdf --stream-data=uncompress "$1" "$pdf" 2> /dev/null

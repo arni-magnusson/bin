@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: Rinstall PKG"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   Rinstall PKG                                                     #
+###                                                                            #
+### Purpose:  Install R package without typing                                 #
+###           R CMD INSTALL PKG_x.y-z.tar.gz                                   #
+###                                                                            #
+### Args:     PKG is an R package directory                                    #
+###                                                                            #
+### Requires: R                                                                #
+###                                                                            #
+### Returns:  Installs package in default library                              #
+###                                                                            #
+################################################################################
+
+# Look for PKG_x.y-z.tar.gz (highest version if many are found)
+targz=`ls -mr $1_*`
+targz=`echo $targz | sed 's/,.*//'`
+
+R --vanilla CMD INSTALL $targz

@@ -1,0 +1,44 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: checkURL url"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   checkURL url                                                     #
+###                                                                            #
+### Purpose:  Check if URLs exist                                              #
+###                                                                            #
+### Args:     url is a web address, or a list of web addresses                 #
+###                                                                            #
+### Notes:    Alternatively, URLs can be passed as separate lines from stdin   #
+###                                                                            #
+### Requires: curl                                                             #
+###                                                                            #
+### Returns:  Exit code 0 or 1, with a brief message                           #
+###                                                                            #
+################################################################################
+
+code=0
+
+# If no args, then read lines from stdin, else parse args
+if [[ -z $* ]]; then
+  while read url; do
+    if curl --output /dev/null --silent --head --fail $url; then
+      echo OK
+    else
+      echo Error: $url not found
+      code=1
+    fi
+  done
+else
+  for url in $*; do
+    if curl --output /dev/null --silent --head --fail $url; then
+      echo OK
+    else
+      echo Error: $url not found
+      code=1
+    fi
+  done
+fi
+
+exit $code

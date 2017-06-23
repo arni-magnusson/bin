@@ -1,0 +1,29 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pdfbust file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pdfbust file                                                     #
+###                                                                            #
+### Purpose:  Remove first page from PDF file                                  #
+###                                                                            #
+### Args:     file is the file to handle                                       #
+###                                                                            #
+### Notes:    Lossless removal, unlike ghostbust.bat                           #
+###           Writes backup bust.pdf in $TMPDIR                                #
+###                                                                            #
+### Requires: pdftk                                                            #
+###                                                                            #
+### Returns:  Overwrites original PDF file, after removing first page          #
+###                                                                            #
+################################################################################
+
+pdftkargs="cat 2-end output"
+backup=$TMPDIR/bust.pdf
+bust="${1%.*}"_bust.pdf
+
+cp "$1" $backup
+pdftk "$1" $pdftkargs "$bust"
+mv "$bust" "$1"

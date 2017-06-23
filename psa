@@ -1,0 +1,33 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: psa [-c] [-p] [-t] [-u] [-z]"; echo;
+            echo "Sort by CMD, PID, START, GROUP-USER-TT, or %CPU (default)."'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   psa [-c] [-p] [-t] [-u]                                          #
+###                                                                            #
+### Purpose:  Show all active processes                                        #
+###                                                                            #
+### Args:     c sorts by CMD                                                   #
+###           p sorts by PID                                                   #
+###           t sorts by START                                                 #
+###           u sorts by GROUP-USER-TT                                         #
+###           z sorts by %CPU (default)                                        #
+###                                                                            #
+### Returns:  Table of active processes                                        #
+###                                                                            #
+################################################################################
+
+by=%cpu
+while getopts "cptu" A; do
+  case $A in
+    c) by=cmd;;
+    p) by=pid;;
+    t) by=start_time;;
+    u) by=group,user,tty;;
+    z) ;;
+  esac
+done
+
+ps -Ao group,user,tty,sgi_p,%cpu,%mem,start_time,etime,pid,comm,cmd --sort $by

@@ -1,0 +1,15 @@
+#!/bin/bash
+shopt -s expand_aliases
+################################################################################
+###                                                                            #
+### Script:   emacsR [options] [file]                                          #
+###                                                                            #
+### Purpose:  Start Emacs in R-mode                                            #
+###                                                                            #
+### Notes:    Use with ESS in Linux                                            #
+###                                                                            #
+### Returns:  Opens Emacs                                                      #
+###                                                                            #
+################################################################################
+
+~/bin/emacs -R "$@"

@@ -1,0 +1,54 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: tighten [-h] [-m 3] [-x] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   tighten                                                          #
+###                                                                            #
+### Purpose:  Tighten bounding box of EPS file                                 #
+###                                                                            #
+### Args:     h changes HiResBoundingBox instead of BoundingBox                #
+###           m is the margin, points between ink and edge of page             #
+###           x removes HiResBoundingBox, or BoundingBox if -h                 #
+###           file is EPS file to tighten                                      #
+###                                                                            #
+### Notes:    Writes backup tighten.eps in $TMPDIR                             #
+###                                                                            #
+### Requires: gs, gawk, sed                                                    #
+###                                                                            #
+### Returns:  Overwrites EPS file with updated bounding box                    #
+###                                                                            #
+################################################################################
+
+h=0
+m=3
+x=0
+while getopts "hm:x" A; do
+  case $A in
+    h) h=1;;
+    m) m=$OPTARG;;
+    x) x=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+if (($h==1)); then bb="%%HiResBoundingBox"; else bb="%%BoundingBox"; fi
+
+backup=$TMPDIR/tighten.eps
+bbfile=$TMPDIR/"${1%.*}".bb
+
+# 1  Calculate narrow box
+gs -dBATCH -dEPSCrop -dNOPAUSE -sDEVICE=bbox $1 > /dev/null 2> $bbfile
+
+# 2  Add margins
+box=`sed -n "/$bb/p" $bbfile | gawk -v BB=$bb -v M=$m \
+'{print BB ": " $2-M " " $3-M " " $4+M " " $5+M}'`
+rm $bbfile
+
+# 3  Backup and overwrite file
+cp $1 $backup
+sed -i "s/$bb.*/$box/g" $1
+if (( x==1 && h==0 )); then sed -i "/^%%HiResBoundingBox/d" $1; fi
+if (( x==1 && h==1 )); then sed -i "/^%%BoundingBox/d" $1; fi

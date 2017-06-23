@@ -1,0 +1,20 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: render dir"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   render file                                                      #
+###                                                                            #
+### Purpose:  Call render without opening R first                              #
+###                                                                            #
+### Args:     file is an Rmd file in R Markdown format                         #
+###                                                                            #
+### Requires: R, rmarkdown                                                     #
+###                                                                            #
+### Returns:  Creates HTML file with same prefix in current directory          #
+###                                                                            #
+################################################################################
+
+Rscript --slave --vanilla -e "rmarkdown::render(\"$1\", quiet=FALSE)"

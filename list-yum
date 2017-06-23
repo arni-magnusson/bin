@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: list-yum"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:  list-yum                                                          #
+###                                                                            #
+### Purpose: List all packages in Yum repositories                             #
+###                                                                            #
+### Returns: Shows directory "home/" in color on screen                        #
+###                                                                            #
+################################################################################
+
+sudo yum list \
+  | sed '1,2d' \
+  | grep -v "^ " \
+  | sed 's/ .*//' \
+  | sed 's/\.i386//' \
+  | sed 's/\.i586//' \
+  | sed 's/\.i686//' \
+  | sed 's/\.noarch//' \
+  | sed 's/\.x86_64//' \
+  | uniq \
+      > ~/list.txt

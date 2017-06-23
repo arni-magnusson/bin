@@ -1,0 +1,55 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: keep [-x] file(s)"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:  keep [-x] file(s)                                                 #
+###                                                                            #
+### Purpose: Remove all files in current directory, except those specified     #
+###                                                                            #
+### Args:    x confirms the removal (default is to report files that would be  #
+###            removed)                                                        #
+###                                                                            #
+### Notes:   Directories, links, and hidden files are not removed, as a safety #
+###            cap                                                             #
+###                                                                            #
+### Returns: Removes files in current directory                                #
+###                                                                            #
+################################################################################
+
+sure=no
+while getopts "x" A; do
+  case $A in
+    x) sure=yes;;
+  esac
+done
+shift $((OPTIND-1))
+
+# 1  Check args
+if [[ -z $* ]]; then
+  echo "Keep something, or use rm * to remove all files. Nothing was removed."
+  exit
+fi
+for f in "$@"; do
+  if [[ ! -e $f ]]; then
+    echo "You tried to keep \"$f\" which doesn't exist. Nothing was removed."
+    exit
+  fi
+done
+
+# 2  Move kept files (and directories) into tempdir
+tempdir=`mktemp -d`
+mv "$@" $tempdir
+
+# 3  Remove remaining files (suppressing directory warnings) or report them
+if [[ $sure == "yes" ]]; then
+  find -maxdepth 1 -type f -not -name '.*' -exec rm {} \;
+else
+  find -maxdepth 1 -type f -not -name '.*' -printf %f\\n | sort
+fi
+
+# 4  Bring back kept files and remove tempdir
+mv $tempdir/* .
+rmdir $tempdir

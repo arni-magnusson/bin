@@ -1,0 +1,43 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: book file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   book file                                                        #
+###                                                                            #
+### Purpose:  Append empty page to PDF book                                    #
+###                                                                            #
+### Args:     file is a PDF document                                           #
+###                                                                            #
+### Notes:    Empty page is same size as page 42                               #
+###                                                                            #
+### Warning:  Filename must not contain spaces                                 #
+###                                                                            #
+### Requires: pdftk, pdf.blank(), sejda-console                                #
+###                                                                            #
+### Returns:  New file "$file_book.pdf" is created in current directory        #
+###                                                                            #
+################################################################################
+
+# 1  Full target path and short prefix
+book=${1%.*}_book.pdf
+page=$TMPDIR/${1%.*}_page.pdf
+empty=$TMPDIR/${1%.*}_empty.pdf
+
+# 2  Set width and height
+pdftk $1 cat 42 output $page
+width=`pdfinfo $page | gawk '/Page size/ {print $3}'`
+height=`pdfinfo $page | gawk '/Page size/ {print $5}'`
+
+# 3  Create _empty.pdf
+Rscript --slave -e \
+"pdf.blank('$empty', as.numeric('$width')/72, as.numeric('$height')/72)"
+
+# 4  Merge book and empty page
+sejda-console merge -f $1 $empty -o $book --overwrite
+
+# 5  Delete temp files
+rm $empty
+rm $page

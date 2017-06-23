@@ -1,0 +1,87 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: hey [-p] [user]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   hey [-p] [user]                                                  #
+###                                                                            #
+### Purpose:  Show user activity on this computer                              #
+###                                                                            #
+### Args:     p reports past activities                                        #
+###           user is someone whose activities should be reported (or up to 3  #
+###             users, spaced inside double quotes)                            #
+###                                                                            #
+### Requires: last, lastlog, ps, users                                         #
+###                                                                            #
+### Returns:  User activity report                                             #
+###                                                                            #
+################################################################################
+
+while getopts "p" A; do
+  case $A in
+    p) past=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+USERLIST=$1
+# If main arg missing, look for other users:
+# to column, rm myself, rm reps, back to row
+if [[ -z $USERLIST ]]; then USERLIST=`users | tr ' ' '\n' | \
+sed "/$USER/d" | sort -u | paste -sd ' '`; fi  # " around $
+
+# 1: User is alone
+if [[ -z $USERLIST ]]; then
+  # 1b: Simple message
+  if [[ -z $past ]]; then
+    echo "You're alone."
+  # 1b: Activity log for this computer
+  else
+    printf "*** This month's guestbook\n\n"
+    # Delete last two lines (uninformative footer), " around $
+    last | sed "/^$USER/d" | tac | sed '1,2d' | tac
+    printf "\n*** Last seen this year\n\n"
+    lastlog | sed "/\*\*Never logged in\*\*\|^$USER\|^root \|^troot /d" | \
+sed '1d' | sort  # skip $USER, root, troot
+    printf "\nRight now, you're alone.\n\n"
+  fi
+
+# 2: User specifically asked for a report about own activities
+elif [[ $USERLIST == $USER ]]; then
+  printf "*** Your active processes\n\n"
+  ps --forest -u $USER -o user,pid,tty,start_time,etime,sgi_p,%cpu,%mem,comm
+  echo
+  if [[ $past == 1 ]]; then
+    printf "*** Your sessions this month\n\n"
+    last | sed -n "/$USER/p"  # " around $
+    echo
+  fi
+
+# 3: Other users are present, or user specifically asked for a report about
+#    someone's activities
+else
+  # 3a: Detailed report about few (1-3) users
+  if (( `echo $USERLIST | tr ' ' '\n' | wc -l` <= 3 )); then
+    for u in $USERLIST; do  # " around $
+      if [[ $u == `users | tr ' ' '\n' | sort -u | sed -n "/$u/p"` ]]; then
+        printf "*** $u is running:\n\n"
+        ps --forest -u $u -o \
+user,pid,tty,start_time,etime,sgi_p,%cpu,%mem,comm | sed 's/^/    /g'
+        echo
+      else
+        printf "*** $u is not using this computer\n\n"
+      fi
+      if [[ $past == 1 ]]; then
+        printf "    Last seen this year:\n"
+        lastlog | sed -n "/$u/p" | sed 's/^/    /g'  # " around $
+        printf "\n    This month's visits:\n"
+        last | sed -n "/$u/p" | sed 's/^/    /g'  # " around $
+        echo
+      fi
+    done
+  # 3b: Simple list of many (4+) users
+  else
+    echo $USERLIST
+  fi
+fi

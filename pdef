@@ -1,0 +1,24 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pdef file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pdef file                                                        #
+###                                                                            #
+### Purpose:  Redistill PDF document with default quality                      #
+###                                                                            #
+### Args:     file is a PDF document                                           #
+###                                                                            #
+### Requires: gs                                                               #
+###                                                                            #
+### Returns:  Creates filename_.pdf in current directory                       #
+###                                                                            #
+################################################################################
+
+gsargs="-sDEVICE=pdfwrite -dEPSCrop -dPDFSETTINGS=/default \
+-dCompatibilityLevel=1.4 -dSAFER -q -o"
+pdf="${1%.*}"_.pdf
+
+gs $gsargs "$pdf" "$1"

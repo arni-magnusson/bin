@@ -1,0 +1,40 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: 2pdf [-d dpi] [-q quality] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   2jpg [-d dpi] [-q quality] file                                  #
+###                                                                            #
+### Purpose:  Convert bitmap or EPS file to JPG format                         #
+###                                                                            #
+### Args:     quality is JPG compression quality, 0-100 (default is 75)        #
+###           dpi is output resolution when converting EPS file                #
+###             (72=low[default], 600=high)                                    #
+###           file is file to convert                                          #
+###                                                                            #
+### Requires: convert, gs                                                      #
+###                                                                            #
+### Returns:  Creates JPG file with same prefix in current directory           #
+###                                                                            #
+################################################################################
+
+gsargs=
+imargs=
+while getopts "d:q:" A; do
+  case $A in
+    d) gsargs="$gsargs -r$OPTARG";;
+    q) gsargs="$gsargs -dJPEGQ=$OPTARG"; imargs="-quality $OPTARG";;
+  esac
+done
+shift $((OPTIND-1))
+
+gsargs="$gsargs -sDEVICE=jpeg -dEPSCrop -dSAFER -q -o"
+jpg="${1%.*}".jpg
+from="${1##*.}"
+
+case $from in
+  eps) gs $gsargs$jpg $1;;
+  *  ) convert $imargs $1 $jpg;;
+esac

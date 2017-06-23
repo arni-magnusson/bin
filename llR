@@ -1,0 +1,31 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: llR [dir]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   llR [dir]                                                        #
+###                                                                            #
+### Purpose:  List directories and files recursively, showing                  #
+###             perm|size|date|name                                            #
+###                                                                            #
+### Args:     dir is the directory or file to show (default is current dir)    #
+###                                                                            #
+### Notes:    Similar to ls -AlR, but more compact                             #
+###                                                                            #
+### Requires: rsync                                                            #
+###                                                                            #
+### Returns:  Directory and file information is shown                          #
+###                                                                            #
+################################################################################
+
+while getopts "" A; do
+  case $A in
+    *) exit;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ -n $1 ]]; then dir=$1; else dir=.; fi
+
+rsync -a --list-only $dir

@@ -1,0 +1,21 @@
+#!/bin/bash
+shopt -s expand_aliases
+################################################################################
+###                                                                            #
+### Script:   ghostview [options] [file]                                       #
+###                                                                            #
+### Purpose:  Start PS/PDF viewer from Emacs                                   #
+###                                                                            #
+### Returns:  Opens KGhostview or Okular                                       #
+###                                                                            #
+################################################################################
+
+which okular > /dev/null
+ok=$?
+
+# Ampersand is appended in Emacs, not here
+if (( ok == 0 )); then
+  okular "$@"
+else
+  evince "$@"
+fi

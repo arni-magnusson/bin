@@ -1,0 +1,22 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: backup-partition dest"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   backup-partition dest                                            #
+###                                                                            #
+### Purpose:  Backup entire Linux partition                                    #
+###                                                                            #
+### Args:     dest is destination directory                                    #
+###                                                                            #
+### Notes:    Two directories are not copied:                                  #
+###             /media (would copy other partitions as well)                   #
+###             /proc (would crash script)                                     #
+###                                                                            #
+### Returns:  Linux partition is copied to directory 'dest'                    #
+###                                                                            #
+################################################################################
+
+for x in `ls -1 -I media -I proc /`; do sudo cp -pr /$x $1; done

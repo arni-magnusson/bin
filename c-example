@@ -1,0 +1,30 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: c-example example"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   c-example example                                                #
+###                                                                            #
+### Purpose:  Copy C/C++ example directory                                     #
+###                                                                            #
+### Args:     example is a keyword like 'hello'                                #
+###                                                                            #
+### Requires: ~/core/tolvur/program/c/examples                                 #
+###                                                                            #
+### Returns:  Example directory is created                                     #
+###                                                                            #
+################################################################################
+
+base=~/core/tolvur/program/c/examples
+case $1 in
+  add   ) file=$base/c/r/add.c;;
+  hello ) file=$base/hello/1_basic/hello.cpp;;
+  helloc) file=$base/c/hello.c;;
+  *     ) exit;;
+esac
+
+rm -Rf $1
+mkdir $1
+cp -p $file $1

@@ -1,0 +1,27 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: ediff file1 file2"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   ediff file1 file2                                                #
+###                                                                            #
+### Purpose:  Compare files in Emacs ediff                                     #
+###                                                                            #
+### Args:     file1 and file2 are files to compare                             #
+###                                                                            #
+### Requires: Emacs                                                            #
+###                                                                            #
+### Returns:  Opens files in Emacs ediff                                       #
+###                                                                            #
+################################################################################
+
+file1=`realpath $1`
+file2=`realpath $2`
+script=`mktemp`
+
+echo "(ediff-files \"$file1\" \"$file2\")" > $script
+echo "(delete-file \"$script\")" >> $script
+
+emacs -l $script

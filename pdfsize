@@ -1,0 +1,35 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pdfsize [-q] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pdfsize [-q] file                                                #
+###                                                                            #
+### Purpose:  Show PDF page size                                               #
+###                                                                            #
+### Args:     q means quiet, suppress echo of filenames                        #
+###           file is a PDF file                                               #
+###                                                                            #
+### Notes:    See pdinfo --help                                                #
+###                                                                            #
+### Requires: pdfinfo                                                          #
+###                                                                            #
+### Returns:  PDF page size is shown                                           #
+###                                                                            #
+################################################################################
+
+quiet=0
+while getopts "q" A; do
+  case $A in
+    q) quiet=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ $quiet == 0 ]]; then
+  echo -n "$1: "
+fi
+
+pdfinfo "$1" | grep -a "Page size" | sed s/"Page size:      "//

@@ -1,0 +1,32 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: fizz"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   fizz                                                             #
+###                                                                            #
+### Purpose:  Solution to FizzBuzz test                                        #
+###                                                                            #
+### Notes:    The task is to print the numbers from 1 to 100, with the         #
+###             following exceptions:                                          #
+###             - for multiples of three print "Fizz" instead of the number    #
+###             - for multiples of five print "Buzz"                           #
+###             - for numbers which are multiples of both three and five print #
+###               "FizzBuzz"                                                   #
+###                                                                            #
+### Returns:  Numbers, Fizz, Buzz, and FizzBuzz                                #
+###                                                                            #
+################################################################################
+
+for i in {1..100}; do
+  if (( i%3==0 && i%5==0 )); then
+    echo FizzBuzz
+  elif (( i%3 == 0 )); then
+    echo Fizz
+  elif (( i%5 == 0 )); then
+    echo Buzz
+  else
+    echo $i
+  fi
+done

@@ -1,0 +1,23 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pdfc file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pdfc file                                                        #
+###                                                                            #
+### Purpose:  Compress PDF document                                            #
+###                                                                            #
+### Args:     file is file to compress                                         #
+###                                                                            #
+### Requires: qpdf                                                             #
+###                                                                            #
+### Returns:  Creates filename_c.pdf in same directory                         #
+###                                                                            #
+################################################################################
+
+pdf="${1%.*}"_c.pdf
+
+# pdftk "$1" output "$pdf" compress
+qpdf "$1" "$pdf"

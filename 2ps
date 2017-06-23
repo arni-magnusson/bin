@@ -1,0 +1,43 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: 2ps [-p paper] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   2ps [-p paper] file                                              #
+###                                                                            #
+### Purpose:  Convert DVI, HTML, PDF, or troff (filename.1) to PS format       #
+###                                                                            #
+### Args:     paper is letter (default) or a4, when converting DVI or PDF      #
+###           file is file to convert                                          #
+###                                                                            #
+### Notes:    HTML conversion options are set in (1) html2ps/html2psrc and in  #
+###             local (2) html2ps.css                                          #
+###                                                                            #
+### Requires: dvips, gs, html2ps, latex, pdftops                               #
+###                                                                            #
+### Returns:  Creates PS file with same prefix in current directory            #
+###                                                                            #
+################################################################################
+
+while getopts "p:" A; do
+  case $A in
+    p) dviargs="-t $OPTARG"; groffargs="-dpaper$OPTARG -P-p$OPTARG";
+       pdfargs="-paper $OPTARG";;
+    q) quality=$OPTARG;;
+  esac
+done
+shift $((OPTIND-1))
+
+groffargs="-mandoc -t -Tps $groffargs"
+dviargs="$dviargs -Ppdf"
+ps="${1%.*}".ps
+from="${1##*.}"
+
+case $from in
+  1   ) groff $groffargs $1 > $ps;;
+  dvi ) dvips $dviargs $1;;
+  html) html2ps $1 > $ps;;
+  pdf ) pdftops $pdfargs $1;;
+esac

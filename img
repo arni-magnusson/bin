@@ -1,0 +1,40 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: img [-q] [-u] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   img [-q] [-u] file                                               #
+###                                                                            #
+### Purpose:  Show bitmap attributes: width, height, depth, colorspace, bytes  #
+###                                                                            #
+### Args:     q means quiet, suppress echo of filenames                        #
+###           u calculates unique colors (expensive)                           #
+###           file is the file(s) to analyze                                   #
+###                                                                            #
+### Notes:    Multipage files have page-specific attributes shown in a very    #
+###             long line, consider 'identify' for those                       #
+###           PDF and EPS files are analyzed as if they had been converted to  #
+###             TIF (many bytes etc.)                                          #
+###                                                                            #
+### Requires: identify                                                         #
+###                                                                            #
+### Returns:  Image attributes are shown                                       #
+###                                                                            #
+################################################################################
+
+format="%f %wx%h %q-bit %r [%b bytes]"
+quiet=0
+while getopts "qu" A; do
+  case $A in
+    q) quiet=1;;
+    u) format="%f %wx%h %q-bit %r in %k colors [%b bytes]";;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ $quiet == 1 ]]; then format=${format:3}; fi
+
+# Loop so that wildcards (*.jpg) are expanded
+for f in "$@"; do identify -format "$format" $f; done

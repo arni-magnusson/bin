@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: Roxy PKG"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   Roxy PKG                                                         #
+###                                                                            #
+### Purpose:  Call roxygenize without opening R first                          #
+###                                                                            #
+### Args:     dir is a package dir, where R files contain Roxygen comments     #
+###                                                                            #
+### Requires: R, roxygen2                                                      #
+###                                                                            #
+### Returns:  Updates package documentation and namespace                      #
+###                                                                            #
+################################################################################
+
+if [[ ! -d "$1" ]]; then
+  echo Error: Directory \'"$1"\' does not exist
+  exit 1
+fi
+
+R --vanilla --slave -e "roxygen2::roxygenize(\"$1\")"

@@ -1,0 +1,21 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: Rall PKG"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   Rall PKG                                                         #
+###                                                                            #
+### Purpose:  Roxygenize, build, and check R package without typing            #
+###           Roxy PKG; Rbuild PKG; Rcheck PKG                                 #
+###                                                                            #
+### Args:     PKG is an R package directory                                    #
+###                                                                            #
+### Requires: R                                                                #
+###                                                                            #
+### Returns:  Checks package and creates PKG.Rcheck directory                  #
+###                                                                            #
+################################################################################
+
+Roxy $1; Rbuild $1; Rcheck $1

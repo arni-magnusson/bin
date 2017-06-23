@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: istex file [subdir]"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   istex file [subdir]                                              #
+###                                                                            #
+### Purpose:  Copy file to IsTeX web server                                    #
+###                                                                            #
+### Args:     file is the file or directory to copy                            #
+###           subdir is an optional target subdirectory within istex           #
+###                                                                            #
+### Requires: www                                                              #
+###                                                                            #
+### Returns:  Copies file to web server                                        #
+###                                                                            #
+################################################################################
+
+www $1
+
+CMD="scp -r $1 hafglan:~www/public/hafro/istex/$2"
+echo $CMD
+eval $CMD

@@ -1,0 +1,60 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help=\
+'echo "Usage: 2png [-a ag] [-b at] [-c colors] [-d dpi] [-g] [-m] file"; echo;
+ echo "  -g  gray"; echo "  -m  mono"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   2png [-a ag] [-b at] [-c colors] [-d dpi] [-g] [-m] file         #
+###                                                                            #
+### Purpose:  Convert bitmap, EPS, or PDF file to PNG format                   #
+###                                                                            #
+### Args:     ag is anti-aliasing for graphics when converting PS/PDF file     #
+###             (1=none[default], 4=full)                                      #
+###           at is anti-aliasing for text when converting PS/PDF file         #
+###             (1=none[default], 4=full)                                      #
+###           colors is number of colours in PNG palette                       #
+###           dpi is output resolution when converting PS/PDF file             #
+###             (72=low[default], 600=high)                                    #
+###           g uses grayscale palette                                         #
+###           m uses monochrome palette                                        #
+###           file is file to convert                                          #
+###                                                                            #
+### Requires: convert, gs                                                      #
+###                                                                            #
+### Returns:  Creates PNG file with same prefix in current directory           #
+###                                                                            #
+################################################################################
+gscolors=16777216
+gsdevice=png16m
+imargs="-depth 8 -type optimize"
+imcolors=16777216
+while getopts "a:b:c:d:gm" A; do
+  case $A in
+    a) gsargs="$gsargs -dGraphicsAlphaBits=$OPTARG";;
+    b) gsargs="$gsargs -dTextAlphaBits=$OPTARG";;
+    c) imargs="-colors $OPTARG"; gscolors=$OPTARG;;
+    d) gsargs="$gsargs -r$OPTARG";;
+    g) gsdevice=pnggray; imargs="$imargs -colorspace gray";;
+    m) gsdevice=pngmono; imargs="$imargs -monochrome";;
+  esac
+done
+shift $((OPTIND-1))
+
+# Choose simpler Ghostscript PNG device if appropriate
+if [[ $gsdevice == png16m && $gscolors -le 16 ]]; then gsdevice=png16; fi
+if [[ $gsdevice == png16m && $gscolors -le 256 ]]; then gsdevice=png256; fi
+gsargs="$gsargs -sDEVICE=$gsdevice -dEPSCrop -dSAFER -q -o"
+
+# Pass ImageMagick colors if user passed -colors
+if (( imcolors < 16777216 )); then imargs=$imargs -colors $imcolors; fi
+
+png="${1%.*}".png
+from="${1##*.}"
+
+case $from in
+  eps|pdf|ps) gs $gsargs$png $1;;
+  *)          convert $imargs $1 $png;;
+esac

@@ -1,0 +1,53 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: tolower [-d maxdepth] file(s)"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   tolower [-d maxdepth] file(s)                                    #
+###                                                                            #
+### Purpose:  Rename directories and files to lowercase                        #
+###                                                                            #
+### Args:     d is how many levels of subdirectories should be recursed into   #
+###             (default is all)                                               #
+###           file is a directory or file(s) that should be renamed            #
+###                                                                            #
+### Returns:  Directories and files are renamed to lowercase                   #
+###                                                                            #
+################################################################################
+
+maxdepth=-1
+while getopts "d:" A; do
+  case $A in
+    d) maxdepth=$OPTARG;;
+  esac
+done
+shift $((OPTIND-1))
+
+if (($# > 1)); then
+  for x in "$@"; do
+    tolower -d $maxdepth $x
+  done
+  exit
+fi
+
+if ((maxdepth == -1)); then
+  findarg=""
+else
+  findarg="-maxdepth $maxdepth"
+fi
+
+# 1  First rename main directory, so we can safely refer to it in lowercase
+dir=`echo $1 | tr [:upper:] [:lower:]`
+mv $1 $dir
+
+# 2  Then rename subdirectories, so we can safely refer to them in lowercase
+for d in `find $dir -mindepth 1 $findarg -type d`; do
+  mv $d `echo $d | tr [:upper:] [:lower:]`
+done
+
+# 3  Finally rename files: mv dir/sub/FILE dir/sub/file
+for f in `find $dir -mindepth 1 $findarg -type f`; do
+  mv $f `echo $f | tr [:upper:] [:lower:]`
+done

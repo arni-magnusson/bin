@@ -1,0 +1,20 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pmerge files"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pcrop files                                                      #
+###                                                                            #
+### Purpose:  Merge PDF document                                               #
+###                                                                            #
+### Args:     files is a space-separated list of files                         #
+###                                                                            #
+### Requires: sejda-console                                                    #
+###                                                                            #
+### Returns:  Creates out.pdf in current directory                             #
+###                                                                            #
+################################################################################
+
+sejda-console merge -f "$@" -o out.pdf --overwrite

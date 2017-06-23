@@ -1,0 +1,47 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: 2tif [-a ag] [-b at] [-d dpi] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   2tif [-a ag] [-b at] [-d dpi] file                               #
+###                                                                            #
+### Purpose:  Convert bitmap, EPS, or PDF file to TIF format                   #
+###                                                                            #
+### Args:     ag is anti-aliasing for graphics when converting PS/PDF file     #
+###             (1=none[default], 4=full)                                      #
+###           at is anti-aliasing for text when converting PS/PDF file         #
+###             (1=none[default], 4=full)                                      #
+###           dpi is output resolution when converting PS/PDF file             #
+###             (72=low[default], 600=high)                                    #
+###           file is file to convert                                          #
+###                                                                            #
+### Requires: convert, gs                                                      #
+###                                                                            #
+### Returns:  Creates TIF file with same prefix in current directory           #
+###                                                                            #
+################################################################################
+
+while getopts "a:b:d" A; do
+  case $A in
+    a) gsargs="$gsargs -dGraphicsAlphaBits=$OPTARG";;
+    b) gsargs="$gsargs -dTextAlphaBits=$OPTARG";;
+    d) gsargs="$gsargs -r$OPTARG";;
+  esac
+done
+shift $((OPTIND-1))
+
+gsargs="$gsargs -sDEVICE=tiff24nc -dEPSCrop -dSAFER -q -o"
+imargs="-compress none"
+tif="${1%.*}".tif
+from="${1##*.}"
+
+case $from in
+  eps|pdf|ps)
+    echo "Consider using 2png and then convert PNG->TIF, for fine control and \
+small file"; echo
+    gs $gsargs$tif $1;;
+  *)
+    convert $imargs $1 $tif;;
+esac

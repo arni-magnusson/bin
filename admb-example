@@ -1,0 +1,36 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: admb-example example"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   admb-example example                                             #
+###                                                                            #
+### Purpose:  Copy ADMB example directory                                      #
+###                                                                            #
+### Args:     example is a keyword like 'simple'                               #
+###                                                                            #
+### Requires: ~/F/tolvur/admb/examples                                         #
+###                                                                            #
+### Returns:  Example directory is created                                     #
+###                                                                            #
+################################################################################
+
+fournier=~/admb/examples/admb
+case $1 in
+  catage  ) dir=$fournier/catage;;
+  logistic) dir=$fournier/../admb-re/logistic;;
+  simpdll ) ;;
+  simple  ) dir=$fournier/simple;;
+  simpler ) dir=$fournier/../admb-re/_manual;;
+  truncreg) dir=$fournier/truncreg;;
+  union   ) dir=$fournier/../admb-re/union;;
+  vol     ) dir=$fournier/vol;;
+  *       ) exit;;
+esac
+
+rm -Rf $1
+mkdir $1
+cp --preserve=timestamps $dir/*.tpl $dir/*.dat $1
+cp --preserve=timestamps $dir/*.pin $1 2> /dev/null

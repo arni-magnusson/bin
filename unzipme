@@ -1,0 +1,102 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: unzipme [-a] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   unzipme [-a] file                                                #
+###                                                                            #
+### Purpose:  Unzip BZ2, GZ, LZMA, RAR, RPM, TAR, XZ, or ZIP file              #
+###                                                                            #
+### Args:     a means unzip in current directory "as is", not creating a new   #
+###             directory for the output                                       #
+###           file is archive to unzip                                         #
+###                                                                            #
+### Requires: bunzip2, gunzip, rpm2cpio, tar, unrar, unzip, xz                 #
+###                                                                            #
+### Returns:  Creates unzipped files in current directory, or new directory if #
+###             archive contains many file/dirs                                #
+###                                                                            #
+################################################################################
+
+unset asis
+while getopts "a" A; do
+  case $A in
+    a) asis=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+# If one file or one dir (or asis), then unzip here
+# Otherwise unzip into a new dir
+
+case $1 in
+  *.tar.bz2)   if [[ -n $asis || `tar -tjf "$1" | sed 's/^\.\///' | \
+                     gawk -F/ '{print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 tar -xjf "$1"
+               else
+                 mkdir -p "${1%.*.*}"; tar -C "${1%.*.*}" -xjf "$1"; fi;;
+  *.tar.gz)    if [[ -n $asis || `tar -tzf "$1" | sed 's/^\.\///' | \
+                     gawk -F/ '{print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 tar -xzf "$1"
+               else
+                 mkdir -p "${1%.*.*}"; tar -C "${1%.*.*}" -xzf "$1"; fi;;
+  *.tar.lzma)  if [[ -n $asis || `tar -tJf "$1" | sed 's/^\.\///' | \
+                     gawk -F/ '{print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 tar -xJf "$1"
+               else
+                 mkdir -p "${1%.*.*}"; tar -C "${1%.*.*}" -xJf "$1"; fi;;
+  *.tar.xz)    if [[ -n $asis || `tar -tJf "$1" | sed 's/^\.\///' | \
+                     gawk -F/ '{print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 tar -xJf "$1"
+               else
+                 mkdir -p "${1%.*.*}"; tar -C "${1%.*.*}" -xJf "$1"; fi;;
+  *.7z)        if [[ -n $asis || `7za l -slt "$1" | \
+                     gawk '$1~/Path/ {print $3}' | \
+                     gawk -F/ 'NR>1 {print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 7za x "$1" > /dev/null
+               else
+                 7za x -o"${1%.*}" "$1" > /dev/null; fi;;
+  *.bz2)       bunzip2 -k "$1";;
+  *.gz)        gunzip -c "$1">"${1%.*}";;
+  *.lzma|*.xz) xz -dk "$1";;
+  *.rar)       if [[ -n $asis || `unrar lb "$1" | sed 's/^\.\///' | \
+                     gawk -F/ '{print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 unrar x "$1"
+               else
+                 unrar x -ad "$1"; fi;;
+  *.rpm)       if [[ -n $asis || `rpm2cpio "$1" | cpio --quiet -t | \
+                     sed 's/^\.\///' | gawk -F/ '{print $1}' | uniq | \
+                     wc -l` == 1 ]]
+               then
+                 rpm2cpio "$1" | cpio --quiet -dim
+               else
+                 mkdir -p "${1%.*}"; cp "$1" "${1%.*}"; cd "${1%.*}"
+                 rpm2cpio `basename "$1"` | cpio --quiet -dim
+                 rm `basename "$1"`; fi;;
+  *.tar)       if [[ -n $asis || `tar -tf "$1" | sed 's/^\.\///' | \
+                     gawk -F/ '{print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 tar -xf "$1"
+               else
+                 mkdir -p "${1%.*}"; tar -C "${1%.*}" -xf "$1"; fi;;
+  *.tgz)       if [[ -n $asis || `tar -tzf "$1" | sed 's/^\.\///' | \
+                     gawk -F/ '{print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 tar -xzf "$1"
+               else
+                 mkdir -p "${1%.*}"; tar -C "${1%.*}" -xzf "$1"; fi;;
+  *.zip)       if [[ -n $asis || `unzip -Z1 "$1" | sed 's/^\.\///' | \
+                     gawk -F/ '{print $1}' | uniq | wc -l` == 1 ]]
+               then
+                 unzip -q "$1"
+               else
+                 unzip -qd "${1%.*}" "$1"; fi;;
+esac

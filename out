@@ -1,0 +1,18 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: out name"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   out name                                                         #
+###                                                                            #
+### Purpose:  Rename out.pdf quickly                                           #
+###                                                                            #
+### Args:     name is the desired filename, without file extension             #
+###                                                                            #
+### Returns:  Renames out.pdf to name.pdf                                      #
+###                                                                            #
+################################################################################
+
+mv out.pdf "$1.pdf"
