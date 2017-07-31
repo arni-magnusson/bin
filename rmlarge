@@ -5,15 +5,15 @@ if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:  rmlarge [-k 1024] directory                                       #
+### Script:   rmlarge [-k 1024] directory                                      #
 ###                                                                            #
-### Purpose: Remove large files from a directory                               #
+### Purpose:  Remove large files from a directory                              #
 ###                                                                            #
-### Args:    k is the threshold file size in KB                                #
+### Args:     k is the threshold file size in KB                               #
 ###                                                                            #
-### Notes:   Implemented for Emacs backup system, subdirs are left intact      #
+### Notes:    Implemented for Emacs backup system, subdirs are left intact     #
 ###                                                                            #
-### Returns: Removes files exceeding threshold from directory                  #
+### Returns:  Removes files exceeding threshold from directory                 #
 ###                                                                            #
 ################################################################################
 

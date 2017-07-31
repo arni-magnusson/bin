@@ -8,7 +8,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Script:   Rbuild PKG                                                       #
 ###                                                                            #
 ### Purpose:  Build R package without typing                                   #
-###           R --vanilla CMD build --compact-vignettes --resave-data PKG      #
+###             R --vanilla CMD build --compact-vignettes --resave-data PKG    #
 ###                                                                            #
 ### Args:     PKG is an R package directory                                    #
 ###                                                                            #

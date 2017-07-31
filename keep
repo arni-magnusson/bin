@@ -5,17 +5,17 @@ if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:  keep [-x] file(s)                                                 #
+### Script:   keep [-x] file(s)                                                #
 ###                                                                            #
-### Purpose: Remove all files in current directory, except those specified     #
+### Purpose:  Remove all files in current directory, except those specified    #
 ###                                                                            #
-### Args:    x confirms the removal (default is to report files that would be  #
-###            removed)                                                        #
+### Args:     x confirms the removal (default is to report files that would be #
+###             removed)                                                       #
 ###                                                                            #
-### Notes:   Directories, links, and hidden files are not removed, as a safety #
-###            cap                                                             #
+### Notes:    Directories, links, and hidden files are not removed, as a       #
+###             safety cap                                                     #
 ###                                                                            #
-### Returns: Removes files in current directory                                #
+### Returns:  Removes files in current directory                               #
 ###                                                                            #
 ################################################################################
 

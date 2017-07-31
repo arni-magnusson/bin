@@ -5,18 +5,18 @@ if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:  apply [-q] 'filter' cmd                                           #
+### Script:   apply [-q] 'filter' cmd                                          #
 ###                                                                            #
-### Purpose: Apply command to many files in current directory                  #
+### Purpose:  Apply command to many files in current directory                 #
 ###                                                                            #
-### Args:    q means quiet, suppress echo of filenames                         #
-###          'filter' is a single-quoted filter, like '*.png'                  #
-###          cmd is a command, like 2jpg -q 100                                #
+### Args:     q means quiet, suppress echo of filenames                        #
+###           filter is a single-quoted filter, like '*.png'                   #
+###           cmd is a command, like 2jpg -q 100                               #
 ###                                                                            #
-### Notes:   Thin for-loop wrapper                                             #
-###          Subdirs are ignored                                               #
+### Notes:    Thin for-loop wrapper                                            #
+###           Subdirs are ignored                                              #
 ###                                                                            #
-### Returns: Applies command to all files in current directory                 #
+### Returns:  Applies command to all files in current directory                #
 ###                                                                            #
 ################################################################################
 

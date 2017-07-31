@@ -8,7 +8,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Script:   Rcheck [-r] PKG                                                  #
 ###                                                                            #
 ### Purpose:  Check R package without typing                                   #
-###           env _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE R --vanilla CMD check   #
+###             env _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE R --vanilla CMD check #
 ###             --as-cran PKG_x.y-z.tar.gz                                     #
 ###                                                                            #
 ### Args:     r connects to remote CRAN server for a full --as-cran check      #

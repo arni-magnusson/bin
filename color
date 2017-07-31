@@ -7,16 +7,16 @@ if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:  color                                                             #
+### Script:   color                                                            #
 ###                                                                            #
-### Purpose: Show color                                                        #
+### Purpose:  Show color                                                       #
 ###                                                                            #
-### Args:    N is an ISO 6429 color code                                       #
+### Args:     N is an ISO 6429 color code                                      #
 ###                                                                            #
-### Notes:   See man dir_colors and bash.doc for color code examples           #
-###          1=bold, 4=underline, 7=inverse, 31=red, 34=blue                   #
+### Notes:    See man dir_colors and bash.doc for color code examples          #
+###           1=bold, 4=underline, 7=inverse, 31=red, 34=blue                  #
 ###                                                                            #
-### Returns: Shows directory "home/" in color on screen                        #
+### Returns:  Shows directory "home/" in color on screen                       #
 ###                                                                            #
 ################################################################################
 
