@@ -17,7 +17,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-fournier=~/admb/examples/admb
+fournier=~/git/admb-project/admb/examples/admb
 case $1 in
   catage  ) dir=$fournier/catage;;
   logistic) dir=$fournier/../admb-re/logistic;;
