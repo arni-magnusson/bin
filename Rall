@@ -7,10 +7,11 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Script:   Rall PKG                                                         #
 ###                                                                            #
-### Purpose:  Roxygenize, build, and check R package without typing            #
-###             Roxy PKG; Rbuild PKG; Rcheck PKG                               #
+### Purpose:  Roxygenize, build, check, and optionally install R package       #
 ###                                                                            #
-### Args:     PKG is an R package directory                                    #
+### Args:     f skips the check (fast build)                                   #
+###           i installs the package in the default library                    #
+###           PKG is an R package directory                                    #
 ###                                                                            #
 ### Requires: R                                                                #
 ###                                                                            #
@@ -18,4 +19,17 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-Roxy $1; Rbuild $1; Rcheck $1
+check=1
+install=0
+while getopts "fi" A; do
+  case $A in
+    f) check=0;;
+    i) install=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+Roxy $1
+Rbuild $1
+if [[ $check == 1 ]]; then Rcheck $1; fi
+if [[ $install == 1 ]]; then Rinstall $1; fi
