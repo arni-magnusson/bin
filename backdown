@@ -31,7 +31,7 @@ while getopts "x" A; do
 done
 shift $((OPTIND-1))
 
-if [[ -z "$@" ]]; then
+if [[ -z $1 ]]; then
   dest=~/core
   source=hafurtask.hafro.is:core
 else

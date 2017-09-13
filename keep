@@ -28,7 +28,7 @@ done
 shift $((OPTIND-1))
 
 # 1  Check args
-if [[ -z $* ]]; then
+if [[ -z $1 ]]; then
   echo "Keep something, or use rm * to remove all files. Nothing was removed."
   exit
 fi

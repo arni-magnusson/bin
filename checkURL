@@ -21,7 +21,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 code=0
 
 # If no args, then read lines from stdin, else parse args
-if [[ -z $* ]]; then
+if [[ -z $1 ]]; then
   while read url; do
     if curl --output /dev/null --silent --head --fail $url; then
       echo OK
