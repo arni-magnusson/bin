@@ -23,10 +23,10 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-sure=no
+sure=0
 while getopts "x" A; do
   case $A in
-    x) sure=yes;;
+    x) sure=1;;
   esac
 done
 shift $((OPTIND-1))
@@ -39,7 +39,7 @@ else
   source=$2
 fi
 
-if [[ $sure == "no" ]]; then
+if [[ $sure == 0 ]]; then
   # Remove ./ line from report
   rsync -ni --out-format "%n%L" -auz --del $source/ $dest/ | sed '/^\.\/$/d'
 else

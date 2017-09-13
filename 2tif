@@ -23,6 +23,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
+unset gsargs
 while getopts "a:b:d" A; do
   case $A in
     a) gsargs="$gsargs -dGraphicsAlphaBits=$OPTARG";;

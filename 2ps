@@ -21,11 +21,13 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
+unset dviargs
+unset groffargs
+unset pdfargs
 while getopts "p:" A; do
   case $A in
     p) dviargs="-t $OPTARG"; groffargs="-dpaper$OPTARG -P-p$OPTARG";
        pdfargs="-paper $OPTARG";;
-    q) quality=$OPTARG;;
   esac
 done
 shift $((OPTIND-1))

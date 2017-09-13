@@ -28,6 +28,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
+unset dviargs
+unset gsargs
 quality=prepress
 while getopts "fgp:q:" A; do
   case $A in

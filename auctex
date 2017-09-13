@@ -26,8 +26,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 
 action=help
-dviargs=
-gsargs=
+unset dviargs
+unset gsargs
 while getopts "ckp:sv" A; do
   case $A in
     c) action=compile;;

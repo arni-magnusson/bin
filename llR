@@ -19,13 +19,6 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-while getopts "" A; do
-  case $A in
-    *) exit;;
-  esac
-done
-shift $((OPTIND-1))
-
 if [[ -n $1 ]]; then dir=$1; else dir=.; fi
 
 rsync -a --list-only $dir

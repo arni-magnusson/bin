@@ -27,6 +27,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Returns:  Creates PNG file with same prefix in current directory           #
 ###                                                                            #
 ################################################################################
+
+unset gsargs
 gscolors=16777216
 gsdevice=png16m
 imargs="-depth 8 -type optimize"

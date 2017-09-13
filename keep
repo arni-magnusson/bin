@@ -19,10 +19,10 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-sure=no
+sure=0
 while getopts "x" A; do
   case $A in
-    x) sure=yes;;
+    x) sure=1;;
   esac
 done
 shift $((OPTIND-1))
@@ -44,7 +44,7 @@ tempdir=`mktemp -d`
 mv "$@" $tempdir
 
 # 3  Remove remaining files (suppressing directory warnings) or report them
-if [[ $sure == "yes" ]]; then
+if [[ $sure == 1 ]]; then
   find -maxdepth 1 -type f -not -name '.*' -exec rm {} \;
 else
   find -maxdepth 1 -type f -not -name '.*' -printf %f\\n | sort
