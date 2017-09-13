@@ -21,7 +21,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 
 unset userargs
-while (($#>1)); do
+while (( $# > 1 )); do
   userargs="$userargs $1"
   shift
 done
