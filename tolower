@@ -25,14 +25,14 @@ while getopts "d:" A; do
 done
 shift $((OPTIND-1))
 
-if (($# > 1)); then
+if (( $# > 1 )); then
   for x in "$@"; do
     tolower -d $maxdepth $x
   done
   exit
 fi
 
-if ((maxdepth == -1)); then
+if [[ $maxdepth == -1 ]]; then
   findarg=""
 else
   findarg="-maxdepth $maxdepth"

@@ -34,7 +34,7 @@ while getopts "hm:x" A; do
 done
 shift $((OPTIND-1))
 
-if (($h==1)); then bb="%%HiResBoundingBox"; else bb="%%BoundingBox"; fi
+if [[ $h == 1 ]]; then bb="%%HiResBoundingBox"; else bb="%%BoundingBox"; fi
 
 backup=$TMPDIR/tighten.eps
 bbfile=$TMPDIR/"${1%.*}".bb
@@ -50,5 +50,5 @@ rm $bbfile
 # 3  Backup and overwrite file
 cp $1 $backup
 sed -i "s/$bb.*/$box/g" $1
-if (( x==1 && h==0 )); then sed -i "/^%%HiResBoundingBox/d" $1; fi
-if (( x==1 && h==1 )); then sed -i "/^%%BoundingBox/d" $1; fi
+if [[ $x == 1 && $h == 0 ]]; then sed -i "/^%%HiResBoundingBox/d" $1; fi
+if [[ $x == 1 && $h == 1 ]]; then sed -i "/^%%BoundingBox/d" $1; fi

@@ -27,11 +27,11 @@ while getopts "fw:" A; do
 done
 shift $((OPTIND-1))
 
-if ((full == 1)); then
+if [[ $full == 1 ]]; then
   lastlog | sed '1d' | sed '/\$/d' | gawk '{print $1}' | sort -u | \
 xargs finger -m | sed -n '/^Login: /p' | sed 's/Login: //' | \
 sed 's/Name: //' | sed 's/\t//g'
-elif ((width > 0)); then
+elif (( width > 0 )); then
   lastlog | sed '1d' | sed '/\$/d' | gawk '{print $1}' | sort -u | \
 column -c $2 | column -t
 else

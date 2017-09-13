@@ -23,7 +23,7 @@ if [[ -z $1 ]]; then
 else
   n="${1//-/}"
 fi
-if ((n > 52)); then
+if (( n > 52 )); then
   n=52
 fi
 last=$((-1 + 2*n))
