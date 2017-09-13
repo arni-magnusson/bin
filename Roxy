@@ -22,4 +22,4 @@ if [[ ! -d "$1" ]]; then
   exit 1
 fi
 
-R --vanilla --slave -e "roxygen2::roxygenize(\"$1\")"
+Rscript --vanilla -e "roxygen2::roxygenize(\"$1\")"
