@@ -1,32 +1,26 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: taf [-q] script"'
+alias help='echo "Usage: taf [script]"'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   taf -q [script]                                                  #
+### Script:   taf [script]                                                     #
 ###                                                                            #
 ### Purpose:  Run all TAF scripts, or a specific script                        #
 ###                                                                            #
-### Args:     q means quiet, suppress messages                                 #
-###           script is R script to run                                        #
+### Args:     script is R script to run                                        #
 ###                                                                            #
 ### Requires: R, icesTAF                                                       #
 ###                                                                            #
-### Returns:  Runs script                                                      #
+### Returns:  Runs script(s)                                                   #
 ###                                                                            #
 ################################################################################
 
-quiet=FALSE
-while getopts "q" A; do
-  case $A in
-    q) quiet=TRUE;;
-  esac
-done
-shift $((OPTIND-1))
+## Add .R if user omitted file extension
+script=${1%.*}.R
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "icesTAF::sourceAll(quiet=$quiet)"
+  Rscript --vanilla -e "icesTAF::sourceAll()"
 else
-  Rscript --vanilla -e "icesTAF::sourceTAF(\"$1\", quiet=$quiet)"
+  Rscript --vanilla -e "icesTAF::sourceTAF(\"$script\")"
 fi
