@@ -10,12 +10,22 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Purpose:  Build R package without typing                                   #
 ###             R --vanilla CMD build --compact-vignettes --resave-data PKG    #
 ###                                                                            #
-### Args:     PKG is an R package directory                                    #
+### Args:     i installs the package in the default library                    #
+###           PKG is an R package directory                                    #
 ###                                                                            #
 ### Requires: R                                                                #
 ###                                                                            #
-### Returns:  Checks package and creates PKG.Rcheck directory                  #
+### Returns:  Builds package and creates PKG_x.y-z.tar.gz in current directory #
 ###                                                                            #
 ################################################################################
 
+install=0
+while getopts "i" A; do
+  case $A in
+    i) install=1;;
+  esac
+done
+shift $((OPTIND-1))
+
 R --vanilla CMD build --compact-vignettes --resave-data $1
+if [[ $install == 1 ]]; then Rinstall $1; fi
