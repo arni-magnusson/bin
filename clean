@@ -1,0 +1,26 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: clean [dir]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   clean [dir]                                                      #
+###                                                                            #
+### Purpose:  Clean TAF directories, or a specific directory                   #
+###                                                                            #
+### Args:     dir is a TAF directory                                           #
+###                                                                            #
+### Requires: R, icesTAF                                                       #
+###                                                                            #
+### Returns:  Removes directories                                              #
+###                                                                            #
+################################################################################
+
+## Shave off .R if user passed script name
+dir=${1%.*}
+
+if [[ -z $1 ]]; then
+  Rscript --vanilla -e "icesTAF::clean()"
+else
+  rm -Rf $dir
+fi
