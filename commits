@@ -1,0 +1,29 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: commits [-f]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   commits [-f]                                                     #
+###                                                                            #
+### Purpose:  List commits that have not been pushed                           #
+###                                                                            #
+### Args:     f shows commits in full format                                   #
+###                                                                            #
+### Requires: git                                                              #
+###                                                                            #
+### Returns:  Shows Git commits                                                #
+###                                                                            #
+################################################################################
+
+format=oneline
+while getopts "f" A; do
+  case $A in
+    f) format="$GIT_FORMAT";
+  esac
+done
+shift $((OPTIND-1))
+
+branch=`git branch | grep "*" | sed 's/* //g'`
+
+git log --abbrev-commit --format="$format" origin/$branch..$branch
