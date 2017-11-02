@@ -1,0 +1,26 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: deps [dir]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   deps [path]                                                      #
+###                                                                            #
+### Purpose:  List R package dependencies for a directory, or a specific file  #
+###                                                                            #
+### Args:     path is a directory or a filename                                #
+###                                                                            #
+### Requires: R, icesTAF                                                       #
+###                                                                            #
+### Returns:  Lists directories                                                #
+###                                                                            #
+################################################################################
+
+## Shave off .R if user passed script name
+path=${1%.*}
+
+if [[ -z $1 ]]; then
+  Rscript --vanilla -e "icesTAF::deps()"
+else
+  Rscript --vanilla -e "icesTAF::deps(\"$path\")"
+fi
