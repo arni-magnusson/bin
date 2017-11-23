@@ -8,7 +8,7 @@ shopt -s expand_aliases
 ###                                                                            #
 ### Args:     See Emacs documentation                                          #
 ###                                                                            #
-### Notes:    The window is maximized, unless user passed -Q                   #
+### Notes:    The window is maximized, unless user passed -fh or -Q            #
 ###           An ampersand is appended, if this is an X session and the user   #
 ###             did not pass -nw explicitly                                    #
 ###                                                                            #
@@ -25,16 +25,18 @@ else
   emacs=/usr/bin/emacs
 fi
 
-# 2  Examine whether user passed -nw or -Q
+# 2  Examine whether user passed -fh, -nw or -Q
+fh=0
 nw=0
 Q=0
 for ARG in "$@"; do
+  if [[ $ARG == "-fh" ]]; then fh=1; fi
   if [[ $ARG == "-nw" ]]; then nw=1; fi
   if [[ $ARG == "-Q" ]]; then Q=1; fi
 done
 
-# 3  Maximize window unless user passed -Q
-if [[ $Q == 0 ]]; then mm="-mm"; else mm=""; fi
+# 3  Maximize window unless user passed -fh or -Q
+if [[ $fh == 0 && $Q == 0 ]]; then mm="-mm"; else mm=""; fi
 
 # 4  Run with ampersand if DISPLAY is defined and user did not pass -nw
 if [[ -n $DISPLAY && $nw == 0 ]]; then
