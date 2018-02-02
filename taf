@@ -1,14 +1,15 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: taf [script]"'
+alias help='echo "Usage: taf [-f] [script]"'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   taf [script]                                                     #
+### Script:   taf [-f] [script]                                                #
 ###                                                                            #
 ### Purpose:  Run all TAF scripts, or a specific script                        #
 ###                                                                            #
-### Args:     script is R script to run                                        #
+### Args:     f forces scripts to run, even when target directory is newer     #
+###           script is R script to run                                        #
 ###                                                                            #
 ### Requires: R, icesTAF                                                       #
 ###                                                                            #
@@ -16,11 +17,19 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
+cmd=make
+while getopts "f" A; do
+  case $A in
+    f) cmd=source;;
+  esac
+done
+shift $((OPTIND-1))
+
 ## Add .R if user omitted file extension
 script=${1%.*}.R
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "icesTAF::sourceAll()"
+  Rscript --vanilla -e "icesTAF::${cmd}All()"
 else
-  Rscript --vanilla -e "icesTAF::sourceTAF(\"$script\")"
+  Rscript --vanilla -e "icesTAF::${cmd}TAF(\"$script\")"
 fi
