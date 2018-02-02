@@ -9,8 +9,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Script:   2pdf [-f] [-g] [-p paper] [-q quality] file                      #
 ###                                                                            #
-### Purpose:  Convert DVI, PDF, PS/EPS, TEX/DTX, TEXI/TEXINFO/TXI file to PDF  #
-###             format                                                         #
+### Purpose:  Convert DVI, PDF, PS/EPS, TEX/DTX, TEXI/TEXINFO/TXI, ODP/ODS/ODT #
+###             file to PDF format                                             #
 ###                                                                            #
 ### Args:     f selects flate compression, to prevent JPEG artifacts on        #
 ###             embedded bitmaps                                               #
@@ -21,7 +21,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###             prepress, default)                                             #
 ###           file is file to convert                                          #
 ###                                                                            #
-### Requires: convert, dvipdfm, gs, texi2dvi                                   #
+### Requires: convert, dvipdfm, gs, libreoffice, texi2dvi                      #
 ###                                                                            #
 ### Returns:  Creates PDF file with same prefix in current directory, or       #
 ###             out.pdf if input file was PDF                                  #
@@ -52,6 +52,7 @@ from="${1##*.}"
 
 case $from in
   dvi             ) dvipdfm $dviargs "$1";;
+  odp|ods|odt     ) libreoffice --convert-to pdf "$1" > /dev/null;;
   pdf             ) gs $gsargs"${1%.*}"_.pdf "$1";;
   ps|eps          ) gs $gsargs$pdf "$1";;
   tex|dtx         ) texi2dvi $texargs "$1";;
