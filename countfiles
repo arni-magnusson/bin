@@ -1,0 +1,32 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: countfiles [dir]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   countfiles [dir]                                                 #
+###                                                                            #
+### Purpose:  Count files inside a directory                                   #
+###                                                                            #
+### Args:     dir is a directory                                               #
+###                                                                            #
+### Notes:    If no directory is specified, all directories are processed      #
+###                                                                            #
+### Returns:  File count is shown, one line per directory                      #
+###                                                                            #
+################################################################################
+
+if [[ -d $1 ]]; then
+  dirlist=$1
+else
+  dirlist=`find * -maxdepth 0 -type d`
+fi
+
+if [[ -z $dirlist ]]; then
+  dirlist=.
+fi
+
+for d in $dirlist; do
+  f=`find $d -type f | wc -l`
+  printf "%#6d | ${d%%/}\n" $f
+done
