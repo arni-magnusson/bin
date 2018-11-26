@@ -29,7 +29,7 @@ shift $((OPTIND-1))
 script=${1%.*}.R
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "icesTAF::${cmd}All()"
+  Rscript --vanilla -e "icesTAF::${cmd}All(rm=TRUE)"
 else
-  Rscript --vanilla -e "icesTAF::${cmd}TAF(\"$script\")"
+  Rscript --vanilla -e "icesTAF::${cmd}TAF(\"$script\", rm=TRUE)"
 fi
