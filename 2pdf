@@ -9,8 +9,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Script:   2pdf [-f] [-g] [-p paper] [-q quality] file                      #
 ###                                                                            #
-### Purpose:  Convert DVI, PDF, PS/EPS, TEX/DTX, TEXI/TEXINFO/TXI, ODP/ODS/ODT #
-###             file to PDF format                                             #
+### Purpose:  Convert DVI, PDF, PS/EPS, TEX/DTX, TEXI/TEXINFO/TXI,             #
+###             ODP/ODS/ODT/DOC/DOCX/PPT/PPTX/XLS/XLSX file to PDF format      #
 ###                                                                            #
 ### Args:     f selects flate compression, to prevent JPEG artifacts on        #
 ###             embedded bitmaps                                               #
@@ -51,11 +51,12 @@ pdf="${1%.*}".pdf
 from="${1##*.}"
 
 case $from in
-  dvi             ) dvipdfm $dviargs "$1";;
-  odp|ods|odt     ) libreoffice --convert-to pdf "$1" > /dev/null;;
-  pdf             ) gs $gsargs"${1%.*}"_.pdf "$1";;
-  ps|eps          ) gs $gsargs$pdf "$1";;
-  tex|dtx         ) texi2dvi $texargs "$1";;
-  texi|texinfo|txi) texi2dvi $texiargs "$1";;
-  *               ) convert "$1" "$pdf";;
+  dvi                       ) dvipdfm $dviargs "$1";;
+  odp|ods|odt               ) libreoffice --convert-to pdf "$1" > /dev/null;;
+  doc|docx|xls|xlsx|ppt|pptx) libreoffice --convert-to pdf "$1" > /dev/null;;
+  pdf                       ) gs $gsargs"${1%.*}"_.pdf "$1";;
+  ps|eps                    ) gs $gsargs$pdf "$1";;
+  tex|dtx                   ) texi2dvi $texargs "$1";;
+  texi|texinfo|txi          ) texi2dvi $texiargs "$1";;
+  *                         ) convert "$1" "$pdf";;
 esac
