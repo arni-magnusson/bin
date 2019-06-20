@@ -1,18 +1,14 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: lorem [-1]"'
+alias help='echo "Usage: lorem [n]"'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   lorem [-1]                                                       #
+### Script:   lorem [n]                                                        #
 ###                                                                            #
 ### Purpose:  Show dummy paragraphs "Lorem ipsum ..."                          #
 ###                                                                            #
-### Args:     arg is the number of paragraphs (default 1, max 52)              #
-###                                                                            #
-### Warning:  If redirecting, make sure there is space before > sign           #
-###                                                                            #
-### Requires: lynx                                                             #
+### Args:     n is the number of paragraphs (default 1)                        #
 ###                                                                            #
 ### Returns:  Shows text on screen                                             #
 ###                                                                            #
@@ -23,10 +19,13 @@ if [[ -z $1 ]]; then
 else
   n="${1//-/}"
 fi
-if (( n > 52 )); then
-  n=52
-fi
-last=$((-1 + 2*n))
 
-lynx -source http://desktoppub.about.com/library/weekly/lorem.txt | dos2unix | \
-sed -n "1,${last}p"
+txt="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod \
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, \
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo \
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse \
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non \
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+for i in `seq $((n-1))`; do echo $txt; echo; done
+echo $txt
