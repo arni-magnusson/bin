@@ -1,11 +1,11 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rbuild PKG"'
+alias help='echo "Usage: Rbuild [-i] PKG"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   Rbuild PKG                                                       #
+### Script:   Rbuild [-i] PKG                                                  #
 ###                                                                            #
 ### Purpose:  Build R package without typing                                   #
 ###             R --vanilla CMD build --compact-vignettes --resave-data PKG    #
