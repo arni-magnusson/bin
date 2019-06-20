@@ -1,0 +1,26 @@
+#!/bin/bash
+shopt -s expand_aliases
+################################################################################
+###                                                                            #
+### Script:   Rscript [options]                                                #
+###                                                                            #
+### Purpose:  Run newest Rscript                                               #
+###                                                                            #
+### Args:     See Rscript documentation                                        #
+###                                                                            #
+### Requires: Rscript                                                          #
+###                                                                            #
+### Returns:  Runs Rscript                                                     #
+###                                                                            #
+################################################################################
+
+# 1  Look for newest Rscript executable
+if [[ -d /opt/r/$R_VERSION ]]; then
+  Rscript=/opt/r/$R_VERSION/bin/Rscript
+else
+  Rscript=/usr/bin/Rscript
+fi
+
+# 2  Run
+# Quote because args can have spaces
+$Rscript "$@"

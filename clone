@@ -1,0 +1,23 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: clone repo"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   clone repo                                                       #
+###                                                                            #
+### Purpose:  Clone repository without opening a browser to copy address       #
+###                                                                            #
+### Args:     repo is a GitHub repository in the format owner/repository       #
+###                                                                            #
+### Requires: git                                                              #
+###                                                                            #
+### Returns:  Local working directory                                          #
+###                                                                            #
+################################################################################
+
+if [[ $1 =~ github.com ]]; then
+  git clone $1
+else
+  git clone git@github.com:$1.git
+fi

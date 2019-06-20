@@ -1,0 +1,35 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: Rexam [-f] PKG"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   Rexam [-f] PKG                                                   #
+###                                                                            #
+### Purpose:  Update R example test results                                    #
+###                                                                            #
+### Args:     f skips the Rcheck                                               #
+### Args:     PKG is an R package directory                                    #
+###                                                                            #
+### Returns:  Copies test results file from PKG.Rcheck to PKG/tests/Examples   #
+###                                                                            #
+################################################################################
+
+run=1
+while getopts "f" A; do
+  case $A in
+    f) run=0;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ $run == 1 ]]; then
+  # Roxygenize, build and install
+  Rall -fi $1
+  # Generate test results
+  Rcheck -f $1
+fi
+
+# Copy test results into package directory
+cp $1.Rcheck/$1-Ex.Rout $1/tests/Examples/$1-Ex.Rout.save

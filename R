@@ -1,0 +1,29 @@
+#!/bin/bash
+shopt -s expand_aliases
+################################################################################
+###                                                                            #
+### Script:   R [options]                                                      #
+###                                                                            #
+### Purpose:  Open newest R                                                    #
+###                                                                            #
+### Args:     See R documentation                                              #
+###                                                                            #
+### Requires: R                                                                #
+###                                                                            #
+### Returns:  Opens R                                                          #
+###                                                                            #
+################################################################################
+
+# 1  Look for newest R executable
+if [[ -d /opt/r/$R_VERSION ]]; then
+  R=/opt/r/$R_VERSION/bin/R
+else
+  R=/usr/bin/R
+fi
+
+# 2  Run
+if (( $# == 0 )); then
+  $R --quiet --save
+else
+  $R "$@"
+fi
