@@ -1,18 +1,18 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rcheck [-r] PKG"'
+alias help='echo "Usage: Rcheck [-f] [-r] PKG"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   Rcheck [-r] PKG                                                  #
+### Script:   Rcheck [-f] [-r] PKG                                             #
 ###                                                                            #
 ### Purpose:  Check R package without typing                                   #
 ###             env _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE R --vanilla CMD check #
 ###             --as-cran PKG_x.y-z.tar.gz                                     #
 ###                                                                            #
-### Args:     r connects to remote CRAN server for a full --as-cran check      #
-###             (takes a long time)                                            #
+### Args:     f runs a plain R CMD check                                       #
+###           r connects to remote CRAN server for a full --as-cran check      #
 ###           PKG is an R package directory                                    #
 ###                                                                            #
 ### Requires: R                                                                #
@@ -21,9 +21,11 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
+ascran=--as-cran
 remote=FALSE
-while getopts "r" A; do
+while getopts "fr" A; do
   case $A in
+    f) unset ascran;;
     r) remote=TRUE;;
   esac
 done
@@ -33,5 +35,5 @@ shift $((OPTIND-1))
 targz=`ls -mr $1_*`
 targz=`echo $targz | sed 's/,.*//'`
 
-env _R_CHECK_CRAN_INCOMING_REMOTE_=$remote R --vanilla CMD check --as-cran \
+env _R_CHECK_CRAN_INCOMING_REMOTE_=$remote ~/bin/R --vanilla CMD check $ascran \
 $targz
