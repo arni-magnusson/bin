@@ -22,5 +22,5 @@ dir=${1%.*}
 if [[ -z $1 ]]; then
   Rscript --vanilla -e "icesTAF::clean()"
 else
-  rm -Rf $dir
+  Rscript --vanilla -e "icesTAF::clean(\"$dir\")"
 fi
