@@ -9,7 +9,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Purpose:  Call roxygenize without opening R first                          #
 ###                                                                            #
-### Args:     dir is a package dir, where R files contain Roxygen comments     #
+### Args:     PKG is an R package directory                                    #
 ###                                                                            #
 ### Requires: R, roxygen2                                                      #
 ###                                                                            #
