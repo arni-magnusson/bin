@@ -5,11 +5,12 @@ if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   ediff file1 file2                                                #
+### Script:   ediff [-nw] file1 file2                                          #
 ###                                                                            #
 ### Purpose:  Compare files in Emacs ediff                                     #
 ###                                                                            #
 ### Args:     file1 and file2 are files to compare                             #
+###           nw opens Emacs ediff in terminal                                 #
 ###                                                                            #
 ### Requires: Emacs                                                            #
 ###                                                                            #
@@ -17,11 +18,18 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-file1=`realpath $1`
-file2=`realpath $2`
+## Support long arg
+unset nw
+if [[ $1 == "-nw" ]]; then
+  nw="-nw"
+  shift
+fi
+
+file1=$1
+file2=$2
 script=`mktemp`
 
 echo "(ediff-files \"$file1\" \"$file2\")" > $script
 echo "(delete-file \"$script\")" >> $script
 
-emacs -l $script
+emacs $nw -l $script
