@@ -10,14 +10,13 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Purpose:  Rename directories and files to lowercase                        #
 ###                                                                            #
 ### Args:     d is how many levels of subdirectories should be recursed into   #
-###             (default is all)                                               #
 ###           file is a directory or file(s) that should be renamed            #
 ###                                                                            #
 ### Returns:  Directories and files are renamed to lowercase                   #
 ###                                                                            #
 ################################################################################
 
-maxdepth=-1
+maxdepth=0
 while getopts "d:" A; do
   case $A in
     d) maxdepth=$OPTARG;;
@@ -32,7 +31,7 @@ if (( $# > 1 )); then
   exit
 fi
 
-if [[ $maxdepth == -1 ]]; then
+if [[ $maxdepth == 0 ]]; then
   findarg=""
 else
   findarg="-maxdepth $maxdepth"
