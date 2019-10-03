@@ -1,35 +1,24 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: boot [-dfs] [script]"'
+alias help='echo "Usage: cleanboot [-f]"'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   boot [-d] [-f] [-s]                                              #
+### Script:   cleanboot [-f]                                                   #
 ###                                                                            #
-### Purpose:  Set up data files and software required for a TAF analysis       #
+### Purpose:  Clean TAF bootstrap directory                                    #
 ###                                                                            #
-### Args:     d processes DATA.bib                                             #
-###           f fast bootstrap with clean=FALSE                                #
-###           s processes SOFTWARE.bib                                         #
+### Args:     f removes bootstrap/library completely                           #
 ###                                                                            #
 ### Requires: R, icesTAF                                                       #
 ###                                                                            #
-### Returns:  Creates subdirectories inside bootstrap                          #
+### Returns:  Removes directories                                              #
 ###                                                                            #
 ################################################################################
 
-data=TRUE
-clean=TRUE
-software=TRUE
-while getopts "dfs" A; do
-  case $A in
-    d) software=FALSE;;
-    f) clean=FALSE;;
-    s) data=FALSE;;
-  esac
-done
-shift $((OPTIND-1))
-
-args="clean=$clean, data=$data, software=$software"
-
-Rscript --vanilla -e "icesTAF::taf.bootstrap($args)"
+if [[ -z $1 ]]; then
+  Rscript --vanilla -e "icesTAF::clean('bootstrap')"
+else
+  Rscript --vanilla -e "icesTAF::clean(c('bootstrap/data','bootstrap/library',\
+                        'bootstrap/library:','bootstrap/software'))"
+fi
