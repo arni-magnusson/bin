@@ -1,11 +1,11 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: ediff file1 file2"'
+alias help='echo "Usage: ediff2 file1 file2"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   ediff [-nw] file1 file2                                          #
+### Script:   ediff2 [-nw] file1 file2                                         #
 ###                                                                            #
 ### Purpose:  Compare files in Emacs ediff                                     #
 ###                                                                            #
@@ -25,11 +25,19 @@ if [[ $1 == "-nw" ]]; then
   shift
 fi
 
-file1=$1
-file2=$2
-script=`mktemp`
+if [[ -d "$1" ]]; then
+  emacs $nw --eval "(ediff-directories \"$1\" \"$2\" nil)"
+else
+  emacs $nw --eval "(ediff-files \"$1\" \"$2\")"
+fi
 
-echo "(ediff-files \"$file1\" \"$file2\")" > $script
-echo "(delete-file \"$script\")" >> $script
+## Old implementation, more robust?
 
-emacs $nw -l $script
+# file1=$1
+# file2=$2
+# script=`mktemp`
+
+# echo "(ediff-files \"$file1\" \"$file2\")" > $script
+# echo "(delete-file \"$script\")" >> $script
+
+# emacs $nw -l $script
