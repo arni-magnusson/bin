@@ -1,7 +1,7 @@
 #!/bin/bash
 shopt -s expand_aliases
 alias help='echo "Usage: size [-b] [-d maxdepth] [-k] [-m] [-s] [dir]";
-            echo "            bytes               KB   MB"'
+            echo "            bytes               KB   MB  sort"'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
