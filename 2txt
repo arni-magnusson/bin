@@ -35,6 +35,6 @@ from="${1##*.}"
 case $from in
   doc ) antiword $userargs $1 > $txt;;
   html) lynx $lynxargs $1 > $txt;;
-  pdf ) pdftotext $userargs $1 $txt;;
+  pdf ) pdftotext $userargs "$1" "$txt";;
   ps  ) gs $gsargs $1 > $txt;;
 esac
