@@ -1,0 +1,27 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: list-apt"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   list-apt                                                         #
+###                                                                            #
+### Purpose:  List all packages in Apt repositories                            #
+###                                                                            #
+### Returns:  Shows directory "home/" in color on screen                       #
+###                                                                            #
+################################################################################
+
+sudo apt list 2> /dev/null \
+  | sed '1d' \
+  | sed 's/\/stable//' \
+  | sed 's/\/unknown//' \
+  | sed 's/ all//' \
+  | sed 's/ amd64//' \
+  | sed 's/,new//' \
+  | sed 's/,stable//' \
+  | sed 's/(.*) \[installed,automatic\]/** \\1/' \
+  | uniq \
+      > ~/list.txt
+
+# | sed '1d' | sed 's/\/stable//' | sed 's/\/unknown//' | sed 's/,now//' > ~/list.txt
