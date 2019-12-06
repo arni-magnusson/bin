@@ -18,10 +18,7 @@ sudo apt list 2> /dev/null \
   | sed 's/\/unknown//' \
   | sed 's/ all//' \
   | sed 's/ amd64//' \
-  | sed 's/,new//' \
+  | sed 's/,now//' \
   | sed 's/,stable//' \
-  | sed 's/(.*) \[installed,automatic\]/** \\1/' \
-  | uniq \
-      > ~/list.txt
-
-# | sed '1d' | sed 's/\/stable//' | sed 's/\/unknown//' | sed 's/,now//' > ~/list.txt
+  | sed 's/ [^\[ ]*//' \
+        > ~/list.txt
