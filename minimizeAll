@@ -1,0 +1,15 @@
+#!/bin/bash
+shopt -s expand_aliases
+################################################################################
+###                                                                            #
+### Script:   minimizeAll                                                      #
+###                                                                            #
+### Purpose:  Minimize all windows from the command line (or keybinding)       #
+###                                                                            #
+### Requires: xdotool                                                          #
+###                                                                            #
+### Returns:  Minimizes all windows                                            #
+###                                                                            #
+################################################################################
+
+for w in `xdotool search --name .`; do xdotool windowminimize $w; done
