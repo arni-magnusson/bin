@@ -1,0 +1,15 @@
+#!/bin/bash
+shopt -s expand_aliases
+################################################################################
+###                                                                            #
+### Script:   rstudio                                                          #
+###                                                                            #
+### Purpose:  Open RStudio from application launcher                           #
+###                                                                            #
+### Requires: rstudio                                                          #
+###                                                                            #
+### Returns:  Opens RStudio                                                    #
+###                                                                            #
+################################################################################
+
+/opt/rstudio/bin/rstudio
