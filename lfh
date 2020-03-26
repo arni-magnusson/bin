@@ -1,0 +1,31 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: lfh [file]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   lfh [-N] [file]                                                  #
+###                                                                            #
+### Purpose:  Show the most recent Git log entries, formatted to single lines  #
+###                                                                            #
+### Args:     N is the maximum number of entries to show (default 10)          #
+###           file is a folder or file inside a Git repository                 #
+###                                                                            #
+### Requires: git                                                              #
+###                                                                            #
+### Returns:  Git log entries are shown on screen                              #
+###                                                                            #
+################################################################################
+
+# First parse special arg -N
+if [[ ${1:0:1} == - ]]; then
+  arg=$1
+  shift
+else
+  arg=-10
+fi
+
+# Then parse file
+if [[ -z $1 ]]; then file=; else file=$1; fi
+
+git log --format="$GIT_FORMAT" $file | head $arg
