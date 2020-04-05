@@ -1,16 +1,17 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rbuild [-i] PKG"'
+alias help='echo "Usage: Rbuild [-c] [-i] PKG"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   Rbuild [-i] PKG                                                  #
+### Script:   Rbuild [-c] [-i] PKG                                             #
 ###                                                                            #
 ### Purpose:  Build R package without typing                                   #
 ###             R --vanilla CMD build --compact-vignettes --resave-data PKG    #
 ###                                                                            #
-### Args:     i installs the package in the default library                    #
+### Args:     c compacts vignettes with gs+qpdf (default is only qpdf)         #
+###           i installs the package in the default library                    #
 ###           PKG is an R package directory                                    #
 ###                                                                            #
 ### Requires: R                                                                #
@@ -19,13 +20,15 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
+compact=--compact-vignettes
 install=0
-while getopts "i" A; do
+while getopts "ci" A; do
   case $A in
+    c) compact=--compact-vignettes=both;;
     i) install=1;;
   esac
 done
 shift $((OPTIND-1))
 
-R --vanilla CMD build --compact-vignettes --resave-data $1
+R --vanilla CMD build $compact --resave-data $1
 if [[ $install == 1 ]]; then Rinstall $1; fi
