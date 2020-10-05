@@ -20,7 +20,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 
 encoding=-utf8
-tidyargs=-e
+tidyargs="-e -omit"
 while getopts "lw" A; do
   case $A in
     l) encoding=-latin1;;
