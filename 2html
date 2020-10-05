@@ -1,0 +1,31 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: 2html [options] file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   2html file                                                       #
+###                                                                            #
+### Purpose:  Convert Markdown, PDF, TeX, or Rd file to HTML format            #
+###                                                                            #
+### Args:     file is file to convert                                          #
+###                                                                            #
+### Requires: latex2html, pdftohtml, R                                         #
+###                                                                            #
+### Returns:  Creates HTML file with same prefix in current directory          #
+###                                                                            #
+################################################################################
+
+latex2htmlargs="-html_version 4.0 -math -noinfo -nonavigation -noaddress \
+-split 0 -link 1 -lcase_tags"
+html="${1%.*}".html
+from="${1##*.}"
+
+case $from in
+  md  ) pandoc "$1" > "$html";;
+  pdf ) pdftohtml -c -noframes "$1";;
+  rd  ) R CMD Rdconv -t html -o $html "$1";;
+  tex ) latex2html $latex2htmlargs "$*";;
+  texi) makeinfo --html "$*";;
+esac
