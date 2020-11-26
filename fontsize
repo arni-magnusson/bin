@@ -1,0 +1,40 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: fontsize [N]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   fontsize [N]                                                     #
+###                                                                            #
+### Purpose:  Set Plasma and Konsole font size to N                            #
+###                                                                            #
+### Args:     N is a font size, e.g 7 or 11                                    #
+###                                                                            #
+### Requires: grep, sed                                                        #
+###                                                                            #
+### Returns:  Modifies ~/.config/kdeglobal and                                 #
+###           ~/.local/share/konsole/Shell.profile                             #
+###                                                                            #
+################################################################################
+
+# Set font size to N
+if [[ -n $1 ]]; then
+  sed -i "s/Noto Sans,[0-9]*/Noto Sans,$1/" ~/.config/kdeglobals
+  sed -i "s/Hack,[0-9]*/Hack,$1/" ~/.config/kdeglobals
+  sed -i "s/Courier 10 Pitch,[0-9]*/Courier 10 Pitch,$1/" \
+      ~/.local/share/konsole/Shell.profile
+fi
+
+# Show font size
+echo "[Plasma]"
+grep "fixed=" ~/.config/kdeglobals | sed 's/,-.*//' | sed 's/,/ /'
+grep "font=" ~/.config/kdeglobals | sed 's/,-.*//' | sed 's/,/ /'
+grep "menuFont=" ~/.config/kdeglobals | sed 's/,-.*//' | sed 's/,/ /'
+grep "smallestReadableFont=" ~/.config/kdeglobals | sed 's/,-.*//' |
+  sed 's/,/ /'
+grep "toolBarFont=" ~/.config/kdeglobals | sed 's/,-.*//' | sed 's/,/ /'
+grep "activeFont=" ~/.config/kdeglobals | sed 's/,-.*//' | sed 's/,/ /'
+
+echo; echo "[Konsole]"
+grep "Font=" ~/.local/share/konsole/Shell.profile | sed 's/,-.*//' |
+  sed 's/,/ /'
