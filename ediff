@@ -18,7 +18,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-## Support long arg
+# Support long arg
 unset nw
 if [[ $1 == "-nw" ]]; then
   nw="-nw"
@@ -31,7 +31,7 @@ else
   emacs $nw --eval "(ediff-files \"$1\" \"$2\")"
 fi
 
-## Old implementation, more robust?
+# Old implementation, more robust?
 
 # file1=$1
 # file2=$2

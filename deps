@@ -16,7 +16,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-## Shave off .R if user passed script name
+# Shave off .R if user passed script name
 path=${1%.*}
 
 if [[ -z $1 ]]; then

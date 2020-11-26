@@ -20,7 +20,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-## Support long args
+# Support long args
 unset userargs
 while (( $# > 1 )); do
   userargs="$userargs $1"
