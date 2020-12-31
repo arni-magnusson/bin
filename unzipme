@@ -41,6 +41,7 @@ function lines
 }
 
 case $1 in
+  # Check dual file extensions first
   *.tar.bz2)   if [[ -n $asis || `tar -tjf "$1" | lines` == 1 ]]
                then
                  tar -xjf "$1"
@@ -94,6 +95,11 @@ case $1 in
                  tar -xzf "$1"
                else
                  mkdir -p "${1%.*}"; tar -C "${1%.*}" -xzf "$1"; fi;;
+  *.txz)       if [[ -n $asis || `tar -tJf "$1" | lines` == 1 ]]
+               then
+                 tar -xJf "$1"
+               else
+                 mkdir -p "${1%.*}"; tar -C "${1%.*}" -xJf "$1"; fi;;
   *.zip)       if [[ -n $asis || `unzip -Z1 "$1" | lines` == 1 ]]
                then
                  unzip -q "$1"
