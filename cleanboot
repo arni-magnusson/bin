@@ -8,7 +8,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Purpose:  Clean TAF bootstrap directory                                    #
 ###                                                                            #
-### Args:     f removes bootstrap/library completely                           #
+### Args:     f removes bootstrap/data, bootstrap/library, and                 #
+##              bootstrap/software completely                                  #
 ###                                                                            #
 ### Requires: R, icesTAF                                                       #
 ###                                                                            #
