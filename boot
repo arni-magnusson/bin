@@ -8,9 +8,9 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Purpose:  Set up data files and software required for a TAF analysis       #
 ###                                                                            #
-### Args:     d processes DATA.bib                                             #
-###           f fast bootstrap with clean=FALSE                                #
-###           s processes SOFTWARE.bib                                         #
+### Args:     d process only DATA.bib                                          #
+###           f force bootstrap with force=TRUE                                #
+###           s process only SOFTWARE.bib                                      #
 ###                                                                            #
 ### Requires: R, icesTAF                                                       #
 ###                                                                            #
@@ -19,17 +19,17 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 
 data=TRUE
-clean=TRUE
+force=FALSE
 software=TRUE
 while getopts "dfs" A; do
   case $A in
     d) software=FALSE;;
-    f) clean=FALSE;;
+    f) force=TRUE;;
     s) data=FALSE;;
   esac
 done
 shift $((OPTIND-1))
 
-args="clean=$clean, data=$data, software=$software"
+args="software=$software, data=$data, force=$force"
 
 Rscript --vanilla -e "icesTAF::taf.bootstrap($args)"
