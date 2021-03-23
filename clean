@@ -10,7 +10,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Args:     dir is a TAF directory                                           #
 ###                                                                            #
-### Requires: R, icesTAF                                                       #
+### Requires: R, TAF                                                           #
 ###                                                                            #
 ### Returns:  Removes directories                                              #
 ###                                                                            #
@@ -20,7 +20,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 dir=${1%.*}
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "icesTAF::clean()"
+  Rscript --vanilla -e "TAF::clean()"
 else
-  Rscript --vanilla -e "icesTAF::clean(\"$dir\")"
+  Rscript --vanilla -e "TAF::clean(\"$dir\")"
 fi

@@ -10,7 +10,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Args:     path is a directory or a filename                                #
 ###                                                                            #
-### Requires: R, icesTAF                                                       #
+### Requires: R, TAF                                                           #
 ###                                                                            #
 ### Returns:  Lists directories                                                #
 ###                                                                            #
@@ -20,7 +20,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 path=${1%.*}
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "icesTAF::deps()"
+  Rscript --vanilla -e "TAF::deps()"
 else
-  Rscript --vanilla -e "icesTAF::deps(\"$path\")"
+  Rscript --vanilla -e "TAF::deps(\"$path\")"
 fi

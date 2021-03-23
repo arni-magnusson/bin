@@ -23,9 +23,9 @@ backup=$TMPDIR/clean.pdf
 clean="${1%.*}"_clean.pdf
 
 cp "$1" $backup
-# pdftk "$1" output "$clean" uncompress
-qpdf --stream-data=uncompress "$1" "$clean" 2> /dev/null
+pdftk "$1" output "$clean" uncompress
+# qpdf --stream-data=uncompress "$1" "$clean" 2> /dev/null
 emacs "$clean" -nw --eval "(pdf-clean)" --eval "(save-buffers-kill-terminal t)"
-# pdftk "$clean" output "$1" compress
-qpdf "$clean" "$1"
+pdftk "$clean" output "$1" compress
+# qpdf "$clean" "$1"
 rm "$clean"

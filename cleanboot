@@ -11,15 +11,15 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Args:     f removes bootstrap/data, bootstrap/library, and                 #
 ##              bootstrap/software completely                                  #
 ###                                                                            #
-### Requires: R, icesTAF                                                       #
+### Requires: R, TAF                                                           #
 ###                                                                            #
 ### Returns:  Removes directories                                              #
 ###                                                                            #
 ################################################################################
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "icesTAF::clean('bootstrap')"
+  Rscript --vanilla -e "TAF::clean('bootstrap')"
 else
-  Rscript --vanilla -e "icesTAF::clean(c('bootstrap/data','bootstrap/library',\
+  Rscript --vanilla -e "TAF::clean(c('bootstrap/data','bootstrap/library',\
                         'bootstrap/library:','bootstrap/software'))"
 fi

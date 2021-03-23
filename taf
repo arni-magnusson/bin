@@ -11,7 +11,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Args:     f forces scripts to run, even when target directory is newer     #
 ###           script is R script to run                                        #
 ###                                                                            #
-### Requires: R, icesTAF                                                       #
+### Requires: R, TAF                                                           #
 ###                                                                            #
 ### Returns:  Runs script(s)                                                   #
 ###                                                                            #
@@ -29,7 +29,7 @@ shift $((OPTIND-1))
 script=${1%.*}.R
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "icesTAF::${cmd}All(rm=TRUE)"
+  Rscript --vanilla -e "TAF::${cmd}All(rm=TRUE)"
 else
-  Rscript --vanilla -e "icesTAF::${cmd}TAF(\"$script\", rm=TRUE)"
+  Rscript --vanilla -e "TAF::${cmd}TAF(\"$script\", rm=TRUE)"
 fi

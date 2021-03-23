@@ -12,7 +12,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###           f force bootstrap with force=TRUE                                #
 ###           s process only SOFTWARE.bib                                      #
 ###                                                                            #
-### Requires: R, icesTAF                                                       #
+### Requires: R, TAF                                                           #
 ###                                                                            #
 ### Returns:  Creates subdirectories inside bootstrap                          #
 ###                                                                            #
@@ -32,4 +32,4 @@ shift $((OPTIND-1))
 
 args="software=$software, data=$data, force=$force"
 
-Rscript --vanilla -e "icesTAF::taf.bootstrap($args)"
+Rscript --vanilla -e "TAF::taf.bootstrap($args)"
