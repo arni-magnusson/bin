@@ -15,8 +15,8 @@ shopt -s expand_aliases
 ################################################################################
 
 # 1  Look for newest R executable
-if [[ -d /opt/r/$R_VERSION ]]; then
-  R=/opt/r/$R_VERSION/bin/R
+if [[ -f /opt/bin/R ]]; then
+  R=/opt/bin/R
 else
   R=/usr/bin/R
 fi

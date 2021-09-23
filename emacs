@@ -19,8 +19,8 @@ shopt -s expand_aliases
 ################################################################################
 
 # 1  Look for newest Emacs executable
-if [[ -f /opt/emacs/$EMACS_VERSION/bin/emacs ]]; then
-  emacs=/opt/emacs/$EMACS_VERSION/bin/emacs
+if [[ -f /opt/bin/emacs ]]; then
+  emacs=/opt/bin/emacs
 else
   emacs=/usr/bin/emacs
 fi
