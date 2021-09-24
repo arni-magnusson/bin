@@ -1,15 +1,14 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpuspeed [-r] [-w]'
+alias help='echo "Usage: "cpuspeed [-r]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpuspeed  [-r] [-w]                                              #
+### Script:   cpuspeed  [-r]                                                   #
 ###                                                                            #
 ### Purpose:  Show current CPU speed of each core                              #
 ###                                                                            #
 ### Args:     r shows range, only the speed of slowest and fastest cores       #
-### Args:     w watches a continuous update of current CPU speeds              #
 ###                                                                            #
 ### Returns:  CPU speeds                                                       #
 ###                                                                            #
@@ -17,18 +16,12 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 
 range=0
 watch=0
-while getopts "rw" A; do
+while getopts "r" A; do
   case $A in
     r) range=1;;
-    w) watch=1;;
   esac
 done
 shift $((OPTIND-1))
-
-if [[ $watch == 1 ]]; then
-  if [[ $range == 0 ]]; then watch -n 0.1 cpuspeed; fi
-  if [[ $range == 1 ]]; then watch -n 0.1 cpuspeed -r; fi
-fi
 
 if [[ $range == 0 ]]; then
   cat /proc/cpuinfo | grep --color=never MHz | cut -c12-15 | sort -n
