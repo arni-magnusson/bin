@@ -15,8 +15,8 @@ shopt -s expand_aliases
 ################################################################################
 
 # 1  Look for newest Rscript executable
-if [[ -d /opt/r/$R_VERSION ]]; then
-  Rscript=/opt/r/$R_VERSION/bin/Rscript
+if [[ -f /opt/bin/R ]]; then
+  Rscript=/opt/bin/Rscript
 else
   Rscript=/usr/bin/Rscript
 fi
