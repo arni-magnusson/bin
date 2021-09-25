@@ -24,8 +24,9 @@ done
 shift $((OPTIND-1))
 
 if [[ $range == 0 ]]; then
-  cat /proc/cpuinfo | grep --color=never MHz | cut -c12-15 | sort -n
+  cat /proc/cpuinfo | grep --color=never MHz | cut -c12-15 | sort -n | \
+    sed 's/\.$//'
 else
   cat /proc/cpuinfo | grep --color=never MHz | cut -c12-15 | sort -n | \
-    sed -n '1p;$p' | paste -s
+    sed 's/\.$//' | sed -n '1p;$p' | paste -s
 fi
