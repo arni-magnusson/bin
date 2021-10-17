@@ -6,7 +6,7 @@ shopt -s expand_aliases
 ###                                                                            #
 ### Purpose:  Start PS/PDF viewer from Emacs                                   #
 ###                                                                            #
-### Returns:  Opens KGhostview or Okular                                       #
+### Returns:  Opens Okular or Evince                                           #
 ###                                                                            #
 ################################################################################
 
