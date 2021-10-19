@@ -1,0 +1,22 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: bright [N]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   bright [N]                                                       #
+###                                                                            #
+### Purpose:  Set screen brightness                                            #
+###                                                                            #
+### Args:     N is an optional value from 0 to 100 (default 40)                #
+###                                                                            #
+### Requires: KDE Plasma                                                       #
+###                                                                            #
+### Returns:  Brightness is set to N                                           #
+###                                                                            #
+################################################################################
+
+if [[ -z $1 ]]; then N=40; else N=$1; fi
+
+qdbus org.kde.Solid.PowerManagement \
+     /org/kde/Solid/PowerManagement/Actions/BrightnessControl setBrightness $N
