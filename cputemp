@@ -24,7 +24,7 @@ shift $((OPTIND-1))
 
 if [[ $range == 0 ]]; then
   sensors | grep --color=never Core | cut -c16-18 | sed 's/+//' | \
-    xargs printf "%4d\n" | sort -n
+    xargs printf "%4d\n" | sort -n | tac
 else
   sensors | grep --color=never Core | cut -c16-18 | sed 's/+//' | \
     xargs printf "%4d\n" | sort -n | sed -n '1p;$p' | paste -s
