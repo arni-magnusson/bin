@@ -1,0 +1,36 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: "cpu [-r]'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   cpu [-r]                                                         #
+###                                                                            #
+### Purpose:  Show current CPU speed and temperature                           #
+###                                                                            #
+### Args:     r shows range, only the lowest and highest value                 #
+###                                                                            #
+### Returns:  CPU speed and temperature                                        #
+###                                                                            #
+################################################################################
+
+range=0
+while getopts "r" A; do
+  case $A in
+    r) range=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ $range == 0 ]]; then
+  echo "*** Speed"
+  cpuspeed
+  echo
+  echo "*** Temperature"
+  cputemp
+else
+  echo -n "Speed        "
+  cpuspeed -r | sed 's/\t/  /'
+  echo -n "Temperature  "
+  cputemp -r | sed 's/\t/  /'
+fi

@@ -1,0 +1,31 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: "cputemp [-r]'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   cputemp [-r]                                                     #
+###                                                                            #
+### Purpose:  Show current CPU temperature of each core                        #
+###                                                                            #
+### Args:     r shows range, only the lowest and highest temperature           #
+###                                                                            #
+### Returns:  CPU temperatures                                                 #
+###                                                                            #
+################################################################################
+
+range=0
+while getopts "r" A; do
+  case $A in
+    r) range=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ $range == 0 ]]; then
+  sensors | grep --color=never Core | cut -c16-18 | sed 's/+//' | \
+    xargs printf "%4d\n" | sort -n
+else
+  sensors | grep --color=never Core | cut -c16-18 | sed 's/+//' | \
+    xargs printf "%4d\n" | sort -n | sed -n '1p;$p' | paste -s
+fi
