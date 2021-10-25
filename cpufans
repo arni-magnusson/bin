@@ -1,0 +1,29 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: "cpufans [-r]'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   cpufans [-r]                                                     #
+###                                                                            #
+### Purpose:  Show current CPU fan speed                                       #
+###                                                                            #
+### Args:     r shows fan speeds side by side                                  #
+###                                                                            #
+### Returns:  Fan speed                                                        #
+###                                                                            #
+################################################################################
+
+range=0
+while getopts "r" A; do
+  case $A in
+    r) range=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ $range == 0 ]]; then
+  sensors | grep --color=never RPM | cut -c14-17
+else
+  sensors | grep --color=never RPM | cut -c14-17 | paste -s
+fi
