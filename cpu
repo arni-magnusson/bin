@@ -6,11 +6,11 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Script:   cpu [-r]                                                         #
 ###                                                                            #
-### Purpose:  Show current CPU speed and temperature                           #
+### Purpose:  Show current CPU status: speed, temperature, and possibly fans   #
 ###                                                                            #
 ### Args:     r shows range, only the lowest and highest value                 #
 ###                                                                            #
-### Returns:  CPU speed and temperature                                        #
+### Returns:  CPU status: speed, temperature, and possibly fan                 #
 ###                                                                            #
 ################################################################################
 
@@ -22,15 +22,27 @@ while getopts "r" A; do
 done
 shift $((OPTIND-1))
 
+sensors | grep -q RPM
+rpm=$?
+
 if [[ $range == 0 ]]; then
   echo "*** Speed"
   cpuspeed
   echo
   echo "*** Temperature"
   cputemp
+  if [[ $rpm == 0 ]]; then
+    echo
+    echo "*** Fan"
+    cpufans
+  fi
 else
   echo -n "Speed        "
   cpuspeed -r | sed 's/\t/  /'
   echo -n "Temperature  "
   cputemp -r | sed 's/\t/  /'
+  if [[ $rpm == 0 ]]; then
+    echo -n "Fan          "
+    cpufans -r | sed 's/\t/  /'
+  fi
 fi
