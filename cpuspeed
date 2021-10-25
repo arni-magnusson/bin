@@ -4,18 +4,17 @@ alias help='echo "Usage: "cpuspeed [-r]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpuspeed  [-r]                                                   #
+### Script:   cpuspeed [-r]                                                    #
 ###                                                                            #
 ### Purpose:  Show current CPU speed of each core                              #
 ###                                                                            #
-### Args:     r shows range, only the speed of slowest and fastest cores       #
+### Args:     r shows range, only the lowest and highest speed                 #
 ###                                                                            #
 ### Returns:  CPU speeds                                                       #
 ###                                                                            #
 ################################################################################
 
 range=0
-watch=0
 while getopts "r" A; do
   case $A in
     r) range=1;;
@@ -24,9 +23,9 @@ done
 shift $((OPTIND-1))
 
 if [[ $range == 0 ]]; then
-  cat /proc/cpuinfo | grep --color=never MHz | cut -c12-15 | sort -n | \
-    sed 's/\.$//'
+  cat /proc/cpuinfo | grep --color=never MHz | cut -c12-15 | sed 's/\.$//' | \
+    xargs printf "%4d\n" | sort -n
 else
-  cat /proc/cpuinfo | grep --color=never MHz | cut -c12-15 | sort -n | \
-    sed 's/\.$//' | sed -n '1p;$p' | paste -s
+  cat /proc/cpuinfo | grep --color=never MHz | cut -c12-15 | sed 's/\.$//' | \
+    xargs printf "%4d\n" | sort -n | sed -n '1p;$p' | paste -s
 fi
