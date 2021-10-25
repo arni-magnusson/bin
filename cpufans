@@ -25,5 +25,5 @@ shift $((OPTIND-1))
 if [[ $range == 0 ]]; then
   sensors | grep --color=never RPM | cut -c14-17
 else
-  sensors | grep --color=never RPM | cut -c14-17 | paste -s
+  sensors | grep --color=never RPM | cut -c14-17 | tac | paste -s
 fi
