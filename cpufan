@@ -1,10 +1,10 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpufans [-r]'
+alias help='echo "Usage: "cpufan [-r]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpufans [-r]                                                     #
+### Script:   cpufan [-r]                                                      #
 ###                                                                            #
 ### Purpose:  Show current CPU fan speed                                       #
 ###                                                                            #
@@ -23,7 +23,7 @@ done
 shift $((OPTIND-1))
 
 if [[ $range == 0 ]]; then
-  sensors | grep --color=never RPM | cut -c14-17
+  sensors | grep --color=never RPM | sed 's/.*\(....\) RPM/\1/'
 else
-  sensors | grep --color=never RPM | cut -c14-17 | tac | paste -s
+  sensors | grep --color=never RPM | sed 's/.*\(....\) RPM/\1/' | tac | paste -s
 fi

@@ -10,6 +10,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Args:     r shows range, only the lowest and highest value                 #
 ###                                                                            #
+### Requires: cpufan, cpuspeed, cputemp                                        #
+###                                                                            #
 ### Returns:  CPU status: speed, temperature, and possibly fan                 #
 ###                                                                            #
 ################################################################################
@@ -34,7 +36,7 @@ if [[ $range == 0 ]]; then
   if [[ $rpm == 0 ]]; then
     echo
     echo "*** Fan"
-    cpufans
+    cpufan
   fi
 else
   echo -n "Speed        "
@@ -43,6 +45,6 @@ else
   cputemp -r | sed 's/\t/  /'
   if [[ $rpm == 0 ]]; then
     echo -n "Fan          "
-    cpufans -r | sed 's/\t/  /'
+    cpufan -r | sed 's/\t/  /'
   fi
 fi

@@ -11,6 +11,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Args:     freq determines the update interval in seconds (default 1)       #
 ###           r shows range, only the lowest and highest value                 #
 ###                                                                            #
+### Requires: cpu                                                              #
+###                                                                            #
 ### Returns:  CPU speed and temperatures                                       #
 ###                                                                            #
 ################################################################################
