@@ -1,50 +1,34 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpu [-r]'
+alias help='echo "Usage: "cpu [-n freq] [-r]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpu [-r]                                                         #
+### Script:   cpu [-n freq] [-r]                                               #
 ###                                                                            #
-### Purpose:  Show current CPU status: speed, temperature, and possibly fans   #
+### Purpose:  Watch CPU speed and temperature                                  #
 ###                                                                            #
-### Args:     r shows range, only the lowest and highest value                 #
+### Args:     freq determines the update interval in seconds (default 1)       #
+###           r shows range, only the lowest and highest value                 #
 ###                                                                            #
-### Requires: cpufan, cpuspeed, cputemp                                        #
+### Requires: cpustatus                                                        #
 ###                                                                            #
-### Returns:  CPU status: speed, temperature, and possibly fan                 #
+### Returns:  CPU speed and temperatures                                       #
 ###                                                                            #
 ################################################################################
 
+freq=1
 range=0
-while getopts "r" A; do
+while getopts "n:r" A; do
   case $A in
+    n) freq=$OPTARG;;
     r) range=1;;
   esac
 done
 shift $((OPTIND-1))
 
-sensors | grep -q RPM
-rpm=$?
-
 if [[ $range == 0 ]]; then
-  echo "*** Speed"
-  cpuspeed
-  echo
-  echo "*** Temperature"
-  cputemp
-  if [[ $rpm == 0 ]]; then
-    echo
-    echo "*** Fan"
-    cpufan
-  fi
+  watch -n $freq -t cpustatus
 else
-  echo -n "Speed        "
-  cpuspeed -r | sed 's/\t/  /'
-  echo -n "Temperature  "
-  cputemp -r | sed 's/\t/  /'
-  if [[ $rpm == 0 ]]; then
-    echo -n "Fan          "
-    cpufan -r | sed 's/\t/  /'
-  fi
+  watch -n $freq -t cpustatus -r
 fi

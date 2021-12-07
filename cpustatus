@@ -1,0 +1,50 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: "cpustatus [-r]'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   cpustatus [-r]                                                   #
+###                                                                            #
+### Purpose:  Show current CPU status: speed, temperature, and possibly fans   #
+###                                                                            #
+### Args:     r shows range, only the lowest and highest value                 #
+###                                                                            #
+### Requires: cpufan, cpuspeed, cputemp                                        #
+###                                                                            #
+### Returns:  CPU status: speed, temperature, and possibly fan                 #
+###                                                                            #
+################################################################################
+
+range=0
+while getopts "r" A; do
+  case $A in
+    r) range=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+sensors | grep -q RPM
+rpm=$?
+
+if [[ $range == 0 ]]; then
+  echo "*** Speed"
+  cpuspeed
+  echo
+  echo "*** Temperature"
+  cputemp
+  if [[ $rpm == 0 ]]; then
+    echo
+    echo "*** Fan"
+    cpufan
+  fi
+else
+  echo -n "Speed        "
+  cpuspeed -r | sed 's/\t/  /'
+  echo -n "Temperature  "
+  cputemp -r | sed 's/\t/  /'
+  if [[ $rpm == 0 ]]; then
+    echo -n "Fan          "
+    cpufan -r | sed 's/\t/  /'
+  fi
+fi
