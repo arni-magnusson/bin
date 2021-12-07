@@ -1,6 +1,6 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: boot [-dfs] [script]"'
+alias help='echo "Usage: boot [-d] [-f] [-s] [script]"'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
