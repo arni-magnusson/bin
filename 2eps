@@ -30,7 +30,7 @@ shift $((OPTIND-1))
 
 pdfargs=-eps
 pnmargs="$pnmargs -level 3 -nocenter -noturn"
-gsargs="$gsargs -sDEVICE=epswrite -dSAFER -q -o"
+gsargs="$gsargs -sDEVICE=eps2write -dSAFER -q -o"
 eps="${1%.*}".eps
 from="${1##*.}"
 
