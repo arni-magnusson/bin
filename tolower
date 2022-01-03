@@ -39,14 +39,14 @@ fi
 
 # 1  First rename main directory, so we can safely refer to it in lowercase
 dir=`echo $1 | tr [:upper:] [:lower:]`
-mv $1 $dir
+mv "$1" "$dir"
 
 # 2  Then rename subdirectories, so we can safely refer to them in lowercase
-for d in `find $dir -mindepth 1 $findarg -type d`; do
-  mv $d `echo $d | tr [:upper:] [:lower:]`
+for d in `find "$dir" -mindepth 1 $findarg -type d`; do
+  mv "$d" `echo "$d" | tr [:upper:] [:lower:]`
 done
 
 # 3  Finally rename files: mv dir/sub/FILE dir/sub/file
-for f in `find $dir -mindepth 1 $findarg -type f`; do
-  mv $f `echo $f | tr [:upper:] [:lower:]`
+for f in `find "$dir" -mindepth 1 $findarg -type f`; do
+  mv "$f" `echo "$f" | tr [:upper:] [:lower:]`
 done
