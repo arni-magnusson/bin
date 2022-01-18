@@ -38,5 +38,6 @@ case $from in
   pdf) pdftops $pdfargs $1;;
   pnm) pnmtops $pnmargs $1>$eps;;
   ps ) gs $gsargs $eps $1;;
+  eps) echo Already in EPS format;;
   *  ) convert $1 pnm:- | pnmtops $pnmargs > $eps;;
 esac
