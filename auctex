@@ -6,7 +6,7 @@ if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   auctex [-c] [-v] [-s] [-p paper] file                            #
+### Script:   auctex [-c] [-v] [-s] [-p paper] [-x] file                       #
 ###                                                                            #
 ### Purpose:  Compile or view LaTeX document from Emacs                        #
 ###                                                                            #
@@ -14,6 +14,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###           v invokes PDF viewer                                             #
 ###           s sweaves Rnw to PDF                                             #
 ###           paper is the paper size, a4 (default) or letter                  #
+###           x cleans intermediate LaTeX files                                #
 ###           file is the TeX file in current Emacs buffer                     #
 ###                                                                            #
 ### Requires: dvips, ghostview, gs, latex, latexmk, R                          #
@@ -28,13 +29,14 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 action=help
 unset dviargs
 unset gsargs
-while getopts "ckp:sv" A; do
+while getopts "ckp:svx" A; do
   case $A in
     c) action=compile;;
     k) action=knit;;
     p) dviargs="-t $OPTARG"; gsargs="-sPAPERSIZE=$OPTARG";;
     s) action=sweave;;
     v) action=view;;
+    x) action=clean;;
   esac
 done
 shift $((OPTIND-1))
@@ -52,18 +54,25 @@ Rnwpdf="${Rnw/%.Rnw/.pdf}"
 dir=`dirname "$1"`
 
 case $action in
+  # TeX-clean-default-intermediate-suffixes from AUCTeX tex.el
+  clean)
+    rm -f "${1%.*}".aux "${1%.*}".bbl "${1%.*}".blg "${1%.*}".brf "${1%.*}".fot
+    rm -f "${1%.*}".glo "${1%.*}".gls "${1%.*}".idx "${1%.*}".ilg "${1%.*}".ind
+    rm -f "${1%.*}".lof "${1%.*}".log "${1%.*}".lot "${1%.*}".nav "${1%.*}".out
+    rm -f "${1%.*}".snm "${1%.*}".toc "${1%.*}".url "${1%.*}".synctex.gz
+    rm -f "${1%.*}".bcf "${1%.*}".runxml "${1%.*}".fls "{1%.*}"blx.bib;;
   compile) latex $tex; dvips $dviargs $dvi; gs $gsargs $pdf $ps;;
   help) help;;
   knit) if [[ "${1##*.}" == .tex ]]; then
           echo "Error: knitr file should not be named .tex"; exit
         fi
-    cd $dir; Rscript --vanilla -e "library(knitr);knit('$Rnw')"
-    latexmk -g -pdf $tex;;
+        cd $dir; Rscript --vanilla -e "library(knitr);knit('$Rnw')"
+        latexmk -g -pdf $tex;;
   sweave) if [[ "${1##*.}" == .tex ]]; then
             echo "Error: sweave file should not be named .tex"; exit
           fi
           cd $dir
           Rscript --vanilla -e "Sweave('$Rnw',debug=TRUE,encoding='UTF-8')"
-    latexmk -g -pdf $tex;;
+          latexmk -g -pdf $tex;;
   view) if [[ -f $pdf ]]; then ghostview $pdf; else ghostview $Rnwpdf; fi;;
 esac
