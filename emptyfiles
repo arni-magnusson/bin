@@ -1,0 +1,33 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: emptyfiles [-d depth] [-x]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   emptyfiles [-d depth] [-x]                                       #
+###                                                                            #
+### Purpose:  Remove all empty files                                           #
+###                                                                            #
+### Args:     depth is the maximum depth (default is 1, current directory)     #
+###           x confirms the removal (default is to report files that would be #
+###             removed)                                                       #
+###                                                                            #
+### Returns:  Removes files                                                    #
+###                                                                            #
+################################################################################
+
+depth=1
+sure=0
+while getopts "d:x" A; do
+  case $A in
+    d) depth=$OPTARG;;
+    x) sure=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ $sure == 0 ]]; then
+  find -maxdepth $depth -type f -empty | cut -c3-
+else
+  find -maxdepth $depth -type f -empty -delete
+fi
