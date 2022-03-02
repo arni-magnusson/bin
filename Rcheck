@@ -1,32 +1,42 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rcheck [-f] [-r] PKG"'
+alias help='echo "Usage: Rcheck [-a] [-r] PKG"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   Rcheck [-f] [-r] PKG                                             #
+### Script:   Rcheck [-a] [-r] PKG                                             #
 ###                                                                            #
 ### Purpose:  Check R package without typing                                   #
 ###             env _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE R --vanilla CMD check #
 ###             --as-cran PKG_x.y-z.tar.gz                                     #
 ###                                                                            #
-### Args:     f runs a plain R CMD check                                       #
-###           r connects to remote CRAN server for a full --as-cran check      #
+### Args:     a runs R CMD check --as-cran without checking remotes            #
+###           r runs R CMD check --as-cran with --vanilla and checks remotes   #
 ###           PKG is an R package directory                                    #
 ###                                                                            #
+### Notes:    Setting the environment variable _R_CHECK_CRAN_INCOMING_REMOTE_  #
+###           to FALSE speeds up the --as-cran check, so we use that if user   #
+###           passes -a but go with a full CRAN check if user passes -r.       #
+###                                                                            #
+###           Using --vanilla slows down the check as it doesn't take          #
+###           advantage of CRAN mirror settings in .Rprofile, so we don't use  #
+###           --vanilla if user passes no flags or -a but we use it if user    #
+###           passes -r.                                                       #
+###
 ### Requires: R                                                                #
 ###                                                                            #
 ### Returns:  Checks package and creates PKG.Rcheck directory                  #
 ###                                                                            #
 ################################################################################
 
-ascran=--as-cran
-remote=FALSE
-while getopts "fr" A; do
+unset ascran
+unset env
+unset vanilla
+while getopts "ar" A; do
   case $A in
-    f) unset ascran;;
-    r) remote=TRUE;;
+    a) ascran=--as-cran; env="env R_CHECK_CRAN_INCOMING_REMOTE_=FALSE";;
+    r) ascran=--as-cran; vanilla=--vanilla;;
   esac
 done
 shift $((OPTIND-1))
@@ -35,5 +45,4 @@ shift $((OPTIND-1))
 targz=`ls -mr $1_*`
 targz=`echo $targz | sed 's/,.*//'`
 
-env _R_CHECK_CRAN_INCOMING_REMOTE_=$remote ~/bin/R --vanilla CMD check $ascran \
-$targz
+$env R $vanilla CMD check $ascran $targz
