@@ -23,7 +23,13 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###           advantage of CRAN mirror settings in .Rprofile, so we don't use  #
 ###           --vanilla if user passes no flags or -a but we use it if user    #
 ###           passes -r.                                                       #
-###
+###                                                                            #
+###           The three cases are:                                             #
+###           1) Rcheck => R CMD check                                         #
+###           2) Rcheck -a =>                                                  #
+###              env R_CHECK_CRAN_INCOMING_REMOTE_=FALSE R CMD check --as-cran #
+###           3) Rcheck -r => R --vanilla CMD check --as-cran                  #
+###                                                                            #
 ### Requires: R                                                                #
 ###                                                                            #
 ### Returns:  Checks package and creates PKG.Rcheck directory                  #
