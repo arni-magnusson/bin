@@ -19,13 +19,12 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 
 # First parse special arg -N
 if [[ ${1:0:1} == - ]]; then
-  arg=$1
-  shift
+  arg=${1:1}; shift
 else
-  arg=-10
+  arg=10
 fi
 
 # Then parse file
 if [[ -z $1 ]]; then file=; else file=$1; fi
 
-git log --format="$GIT_FORMAT" $file | head $arg
+git log HEAD~$arg..HEAD --format="$GIT_FORMAT" $file
