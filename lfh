@@ -11,20 +11,27 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Args:     N is the maximum number of entries to show (default 10)          #
 ###           file is a folder or file inside a Git repository                 #
 ###                                                                            #
+### Notes:    lfh = log-full | head                                            #
+###                                                                            #
 ### Requires: git                                                              #
 ###                                                                            #
 ### Returns:  Git log entries are shown on screen                              #
 ###                                                                            #
 ################################################################################
 
-# First parse special arg -N
+# Parse special arg -N
 if [[ ${1:0:1} == - ]]; then
-  arg=${1:1}; shift
+  n=${1:1}; shift
 else
-  arg=10
+  n=5
 fi
 
-# Then parse file
+# Parse file arg
 if [[ -z $1 ]]; then file=; else file=$1; fi
 
-git log HEAD~$arg..HEAD --format="$GIT_FORMAT" $file
+# Show log
+if git log HEAD~$n..HEAD --format="$GIT_FORMAT" $file &> /dev/null; then
+  git log HEAD~$n..HEAD --format="$GIT_FORMAT" $file
+else
+  git log --format="$GIT_FORMAT" $file
+fi
