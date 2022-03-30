@@ -20,4 +20,5 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 
 file=$1; shift
 
-sejda-console extractpages -f "$file" -o out.pdf -s $@ --overwrite
+sejda-console extractpages -f "$file" -s $@ -o $TMPDIR -j overwrite
+mv "$TMPDIR/$file" out.pdf

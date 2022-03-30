@@ -17,5 +17,5 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-sejda-console crop -f "$1" --cropAreas [$2][$3] -o /tmp -j overwrite
-mv "/tmp/$1" out.pdf
+sejda-console crop -f "$1" --cropAreas [$2][$3] -o $TMPDIR -j overwrite
+mv "$TMPDIR/$1" out.pdf
