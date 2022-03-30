@@ -1,25 +1,34 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: book file"'
+alias help='echo "Usage: book [-r refpage] file"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   book file                                                        #
+### Script:   book [-r refpage] file                                           #
 ###                                                                            #
 ### Purpose:  Append empty page to PDF book                                    #
 ###                                                                            #
-### Args:     file is a PDF document                                           #
+### Args:     refpage is the page used to set height and width of empty page   #
+###           file is a PDF document                                           #
 ###                                                                            #
-### Notes:    Empty page is same size as page 42                               #
+### Notes:    If -r is not supplied, page 42 is used as the reference page     #
 ###                                                                            #
 ### Warning:  Filename must not contain spaces                                 #
 ###                                                                            #
-### Requires: pdftk, pdf.blank(), sejda-console                                #
+### Requires: pdfinfo, pdftk, pdf.blank(), sejda-console                       #
 ###                                                                            #
 ### Returns:  New file "$file_book.pdf" is created in current directory        #
 ###                                                                            #
 ################################################################################
+
+ref=42
+while getopts "r:" A; do
+  case $A in
+    r) ref=$OPTARG;;
+  esac
+done
+shift $((OPTIND-1))
 
 # 1  Full target path and short prefix
 book=${1%.*}_book.pdf
@@ -27,7 +36,9 @@ page=$TMPDIR/${1%.*}_page.pdf
 empty=$TMPDIR/${1%.*}_empty.pdf
 
 # 2  Set width and height
-pdftk $1 cat 42 output $page
+rm -f $page
+pdftk $1 cat $ref output $page
+if [[ -f $page ]]; then true; else echo "Consider passing -r"; exit 1; fi
 width=`pdfinfo $page | gawk '/Page size/ {print $3}'`
 height=`pdfinfo $page | gawk '/Page size/ {print $5}'`
 
