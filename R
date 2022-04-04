@@ -23,7 +23,7 @@ fi
 
 # 2  Run
 if (( $# == 0 )); then
-  $R --quiet --save
+  $R --quiet --save --no-restore-data
 else
   $R "$@"
 fi
