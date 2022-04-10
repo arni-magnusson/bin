@@ -1,0 +1,20 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: ofp-sam repo"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   ofp-sam repo                                                     #
+###                                                                            #
+### Purpose:  Clone OFP-SAM repository by typing 'ofp-sam repo' instead of     #
+###             'clone PacificCommunity/ofp-sam-repo' and then rename to repo  #
+###                                                                            #
+### Requires: git                                                              #
+###                                                                            #
+### Returns:  Clones GitHub repository to local folder and renames it          #
+###                                                                            #
+################################################################################
+
+git clone git@github.com:PacificCommunity/ofp-sam-$1
+mv -v ofp-sam-$1 $1
