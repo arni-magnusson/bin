@@ -1,0 +1,23 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: github-preview [file]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   github-preview [file]                                            #
+###                                                                            #
+### Purpose:  Preview GitHub markdown                                          #
+###                                                                            #
+### Args:     file is markdown file to convert to HTML                         #
+###                                                                            #
+### Requires: grip                                                             #
+###                                                                            #
+### Returns:  Creates HTML file with same prefix in current directory          #
+###                                                                            #
+################################################################################
+
+if [[ -z $1 ]]; then file=README.md; else file="$1"; fi
+
+out="${file%.*}".html
+
+grip "$file" --export "$out"
