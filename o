@@ -1,16 +1,20 @@
 #!/bin/bash
 shopt -s expand_aliases
+alias help='echo "Usage: o repo"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   o [file]                                                         #
+### Script:   o repo                                                           #
 ###                                                                            #
-### Purpose:  Open Okular as a separate process, without typing ampersand      #
-###             after the filename                                             #
+### Purpose:  Clone OFP-SAM repository by typing 'o repo' instead of           #
+###             'clone PacificCommunity/ofp-sam-repo' and then rename to repo  #
 ###                                                                            #
-### Requires: o                                                                #
+### Requires: git                                                              #
 ###                                                                            #
-### Returns:  Okular                                                           #
+### Returns:  Clones GitHub repository to local folder and renames it          #
 ###                                                                            #
 ################################################################################
 
-okular "$@" &
+git clone git@github.com:PacificCommunity/ofp-sam-$1
+mv -v ofp-sam-$1 $1
