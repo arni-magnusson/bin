@@ -19,8 +19,15 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 
 repo=$1
 
+# Decide whether to favor https or git@github
+if [[ $OSTYPE == msys ]]; then  # Git Bash terminal in Windows
+  prefix=https://github.com/
+else
+  prefix=git@github:            # WSL and Linux
+fi
+
 # Prepend git@github.com: and append .git if needed
-if [[ ! $repo =~ github.com ]]; then repo=git@github.com:$repo; fi
+if [[ ! $repo =~ github.com ]]; then repo=$prefix$repo; fi
 if [[ ${repo:(-4)} != .git ]]; then repo=$repo.git; fi
 
 git clone $repo
