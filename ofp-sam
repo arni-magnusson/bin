@@ -10,11 +10,11 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Purpose:  Clone OFP-SAM repository by typing 'ofp-sam repo' instead of     #
 ###             'clone PacificCommunity/ofp-sam-repo' and then rename to repo  #
 ###                                                                            #
-### Requires: git                                                              #
+### Requires: clone                                                            #
 ###                                                                            #
 ### Returns:  Clones GitHub repository to local folder and renames it          #
 ###                                                                            #
 ################################################################################
 
-git clone git@github.com:PacificCommunity/ofp-sam-$1
+clone PacificCommunity/ofp-sam-$1
 mv -v ofp-sam-$1 $1
