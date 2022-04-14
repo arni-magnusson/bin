@@ -23,6 +23,8 @@ if [[ -f ~/opt/bin/emacs ]]; then
   emacs=~/opt/bin/emacs
 elif [[ -f /opt/bin/emacs ]]; then
   emacs=/opt/bin/emacs
+elif [[ -f /c/gnu/emacs/bin/runemacs.exe ]]; then
+  emacs=/c/gnu/emacs/bin/runemacs.exe
 else
   emacs=/usr/bin/emacs
 fi
