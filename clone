@@ -23,7 +23,7 @@ repo=$1
 if [[ $OSTYPE == msys ]]; then  # Git Bash terminal in Windows
   prefix=https://github.com/
 else
-  prefix=git@github:            # WSL and Linux
+  prefix=git@github.com:        # WSL and Linux
 fi
 
 # Prepend git@github.com: and append .git if needed
