@@ -13,7 +13,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###             directory for the output                                       #
 ###           file is archive to unzip                                         #
 ###                                                                            #
-### Requires: bunzip2, gunzip, rpm2cpio, tar, unrar, unzip, xz                 #
+### Requires: bunzip2, gawk, gunzip, rpm2cpio, tar, unrar, unzip, xz           #
 ###                                                                            #
 ### Returns:  Creates unzipped files in current directory, or new directory if #
 ###             archive contains many file/dirs                                #
