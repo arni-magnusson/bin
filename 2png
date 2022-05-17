@@ -32,12 +32,11 @@ unset gsargs
 gscolors=16777216
 gsdevice=png16m
 imargs="-depth 8 -type optimize"
-imcolors=16777216
 while getopts "a:b:c:d:gm" A; do
   case $A in
     a) gsargs="$gsargs -dGraphicsAlphaBits=$OPTARG";;
     b) gsargs="$gsargs -dTextAlphaBits=$OPTARG";;
-    c) imargs="-colors $OPTARG"; gscolors=$OPTARG;;
+    c) imargs="$imargs -colors $OPTARG"; gscolors=$OPTARG;;
     d) gsargs="$gsargs -r$OPTARG";;
     g) gsdevice=pnggray; imargs="$imargs -colorspace gray";;
     m) gsdevice=pngmono; imargs="$imargs -monochrome";;
@@ -49,9 +48,6 @@ shift $((OPTIND-1))
 if [[ $gsdevice == png16m && $gscolors -le 16 ]]; then gsdevice=png16; fi
 if [[ $gsdevice == png16m && $gscolors -le 256 ]]; then gsdevice=png256; fi
 gsargs="$gsargs -sDEVICE=$gsdevice -dEPSCrop -dSAFER -q -o"
-
-# Pass ImageMagick colors if user passed -colors
-if (( imcolors < 16777216 )); then imargs=$imargs -colors $imcolors; fi
 
 png="${1%.*}".png
 from="${1##*.}"
