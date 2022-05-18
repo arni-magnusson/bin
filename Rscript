@@ -15,10 +15,14 @@ shopt -s expand_aliases
 ################################################################################
 
 # 1  Look for newest Rscript executable
-if [[ -f /opt/bin/R ]]; then
+if [[ -f /opt/bin/Rscript ]]; then     # Linux, newest R in /opt
   Rscript=/opt/bin/Rscript
+elif [[ -f ~/opt/bin/Rscript ]]; then  # Linux, newest R in ~/opt
+  Rscript=~/opt/bin/Rscript
+elif [[ -d /c/gnu/r/bin ]]; then       # Windows Git Bash, R in c:/gnu/r
+  Rscript=/c/gnu/r/bin/Rscript.exe
 else
-  Rscript=/usr/bin/Rscript
+  Rscript=/usr/bin/Rscript             # Linux, system R
 fi
 
 # 2  Run
