@@ -44,7 +44,7 @@ height=`pdfinfo $page | gawk '/Page size/ {print $5}'`
 
 # 3  Create _empty.pdf
 Rscript --slave -e \
-"pdf.blank('$empty', as.numeric('$width')/72, as.numeric('$height')/72)"
+"arni::pdf.blank('$empty', as.numeric('$width')/72, as.numeric('$height')/72)"
 
 # 4  Merge book and empty page
 sejda-console merge -f $1 $empty -o $book --overwrite
