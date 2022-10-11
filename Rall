@@ -5,12 +5,13 @@ if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   Rall [-f] [-i] [-r] PKG                                          #
+### Script:   Rall [-f] [-i] [-n] [-r] PKG                                     #
 ###                                                                            #
 ### Purpose:  Roxygenize, build, check, and optionally install R package       #
 ###                                                                            #
 ### Args:     f skips the check (fast build)                                   #
 ###           i installs the package in the default library                    #
+###           n builds withou vignettes                                        #
 ###           r connects to remote CRAN server for a full --as-cran check      #
 ###           PKG is an R package directory                                    #
 ###                                                                            #
@@ -23,16 +24,18 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 args=
 check=1
 install=0
-while getopts "fir" A; do
+vignettes=
+while getopts "finr" A; do
   case $A in
     f) check=0;;
     i) install=1;;
+    n) vignettes=-n;;
     r) args=-r;;
   esac
 done
 shift $((OPTIND-1))
 
 Roxy $1
-Rbuild $1
+Rbuild $vignettes $1
 if [[ $check == 1 ]]; then Rcheck $args $1; fi
 if [[ $install == 1 ]]; then Rinstall $1; fi
