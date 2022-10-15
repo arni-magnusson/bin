@@ -50,8 +50,10 @@ while getopts "ar" A; do
 done
 shift $((OPTIND-1))
 
+folder=${1%/}  # shave off trailing /
+
 # Look for PKG_x.y-z.tar.gz (highest version if many are found)
-targz=`ls -mr $1_*`
+targz=`ls -mr ${folder}_*`
 targz=`echo $targz | sed 's/,.*//'`
 
 $env R $vanilla CMD check $ascran $targz
