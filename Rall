@@ -11,7 +11,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Args:     f skips the check (fast build)                                   #
 ###           i installs the package in the default library                    #
-###           n builds withou vignettes                                        #
+###           n builds without vignettes                                       #
 ###           r connects to remote CRAN server for a full --as-cran check      #
 ###           PKG is an R package directory                                    #
 ###                                                                            #
