@@ -21,7 +21,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 folder=${1%/}  # shave off trailing /
 
 # Look for PKG_x.y-z.tar.gz (highest version if many are found)
-targz=`ls -mr ${folder}_*`
+targz=`ls -mr ${folder}_*.tar.gz`
 targz=`echo $targz | sed 's/,.*//'`
 
 R --vanilla CMD INSTALL $targz
