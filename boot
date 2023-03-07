@@ -32,4 +32,4 @@ shift $((OPTIND-1))
 
 args="software=$software, data=$data, force=$force"
 
-Rscript --vanilla -e "TAF::taf.bootstrap($args)"
+Rscript --vanilla -e "TAF::taf.boot($args)"
