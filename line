@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: line n file"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   line n file                                                      #
+###                                                                            #
+### Purpose:  Show line(s) in a file                                           #
+###                                                                            #
+### Args:     n is an integer or two integers, separated by comma or hyphen,   #
+###             indicating which line or line range to show                    #
+###           file is file to read                                             #
+###                                                                            #
+### Requires: sed                                                              #
+###                                                                            #
+### Returns:  Line(s) are shown on screen                                      #
+###                                                                            #
+################################################################################
+
+# Replace hyphen with comma
+lines=`echo $1 | tr - ,`
+
+# Show lines
+sed -n ${lines}p "$2"
