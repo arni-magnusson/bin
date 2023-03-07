@@ -18,8 +18,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "TAF::clean('bootstrap')"
+  Rscript --vanilla -e "TAF::clean('boot')"
 else
-  Rscript --vanilla -e "TAF::clean(c('bootstrap/data','bootstrap/library',\
-                        'bootstrap/library:','bootstrap/software'))"
+  Rscript --vanilla -e "TAF::clean('boot', force=TRUE)"
 fi
