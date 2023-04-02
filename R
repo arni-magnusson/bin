@@ -19,7 +19,7 @@ if [[ -f /opt/bin/R ]]; then      # Linux, newest R in /opt
   R=/opt/bin/R
 elif [[ -f ~/opt/bin/R ]]; then   # Linux, newest R in ~/opt
   R=~/opt/bin/R
-elif [[ -d /c/gnu/r/bin ]]; then  # Windows Git Bash, R in c:/gnu/r
+elif [[ -n $WINDIR && -d /c/gnu/r/bin ]]; then  # Windows Git Bash, c:/gnu/r
   R=/c/gnu/r/bin/R.exe
 else                              # Linux, system R
   R=/usr/bin/R
