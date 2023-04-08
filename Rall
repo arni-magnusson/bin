@@ -27,7 +27,7 @@ check=1
 install=0
 roxygenize=1
 vignettes=
-while getopts "finr" A; do
+while getopts "finrs" A; do
   case $A in
     f) check=0;;
     i) install=1;;
