@@ -1,0 +1,20 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: color_histogram file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   color_histogram file                                             #
+###                                                                            #
+### Purpose:  Show color histogram                                             #
+###                                                                            #
+### Args:     file is image file to analyze                                    #
+###                                                                            #
+### Requires: convert                                                          #
+###                                                                            #
+### Returns:  Shows color histogram in console                                 #
+###                                                                            #
+################################################################################
+
+convert "$1" -define histogram:unique-colors=true -format %c histogram:info:-
