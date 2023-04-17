@@ -1,28 +1,41 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: pdfclean file"'
+alias help='echo "Usage: pdfclean [-n] file"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   pdfclean file                                                    #
+### Script:   pdfclean [-n] file                                               #
 ###                                                                            #
 ### Purpose:  Replace PDF stamp like '(Downloaded by ...)' with spaces         #
 ###                                                                            #
-### Args:     file is a PDF document                                           #
+### Args:     n does not backup in $TMPDIR                                     #
+###           file is a PDF document                                           #
 ###                                                                            #
-### Notes:    Writes backup clean.pdf in $TMPDIR                               #
+### Notes:    The default is to write copy a backup of the file in $TMPDIR.    #
+###           The -n option is useful if the user has limited write access.    #
 ###                                                                            #
-### Requires: qpdf, Emacs with Lisp function `pdf-clean' in .emacs             #
+### Requires: pdftk, Emacs with Lisp function `pdf-clean' in .emacs            #
 ###                                                                            #
 ### Returns:  Overwrites original PDF file, after removing stamps              #
 ###                                                                            #
 ################################################################################
 
-backup=$TMPDIR/clean.pdf
+backup=0
+while getopts "n" A; do
+  case $A in
+    n) backup=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+backupfile=$TMPDIR/clean.pdf
 clean="${1%.*}"_clean.pdf
 
-cp "$1" $backup
+if [[ backup == 1 ]]; then
+  cp "$1" $backupfile
+fi
+
 pdftk "$1" output "$clean" uncompress
 # qpdf --stream-data=uncompress "$1" "$clean" 2> /dev/null
 emacs "$clean" -nw --eval "(pdf-clean)" --eval "(save-buffers-kill-terminal t)"
