@@ -12,10 +12,10 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Purpose:  Convert bitmap, EPS, or PDF file to PNG format                   #
 ###                                                                            #
 ### Args:     ag is anti-aliasing for graphics when converting PS/PDF file     #
-###             (1=none[default], 4=full)                                      #
+###             (1=none, 4=full[default])                                      #
 ###           at is anti-aliasing for text when converting PS/PDF file         #
-###             (1=none[default], 4=full)                                      #
-###           colors is number of colours in PNG palette                       #
+###             (1=none, 4=full[default])                                      #
+###           colors is number of colors in PNG palette                        #
 ###           dpi is output resolution when converting PS/PDF file             #
 ###             (72=low[default], 600=high)                                    #
 ###           g uses grayscale palette                                         #
@@ -29,13 +29,15 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 
 unset gsargs
+a=4
+b=4
 gscolors=16777216
 gsdevice=png16m
 imargs="-depth 8 -type optimize"
 while getopts "a:b:c:d:gm" A; do
   case $A in
-    a) gsargs="$gsargs -dGraphicsAlphaBits=$OPTARG";;
-    b) gsargs="$gsargs -dTextAlphaBits=$OPTARG";;
+    a) a=$OPTARG;;
+    b) b=$OPTARG;;
     c) imargs="$imargs -colors $OPTARG"; gscolors=$OPTARG;;
     d) gsargs="$gsargs -r$OPTARG";;
     g) gsdevice=pnggray; imargs="$imargs -colorspace gray";;
@@ -43,6 +45,10 @@ while getopts "a:b:c:d:gm" A; do
   esac
 done
 shift $((OPTIND-1))
+
+# Set a and b
+gsargs="$gsargs -dGraphicsAlphaBits=$a"
+gsargs="$gsargs -dTextAlphaBits=$b"
 
 # Choose simpler Ghostscript PNG device if appropriate
 if [[ $gsdevice == png16m && $gscolors -le 16 ]]; then gsdevice=png16; fi
