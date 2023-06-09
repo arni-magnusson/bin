@@ -1,6 +1,6 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rall [-f] [-i] [-n] [-r] [s] PKG"'
+alias help='echo "Usage: Rall [-f] [-i] [-n] [-r] [-s] PKG"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
