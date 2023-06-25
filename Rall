@@ -1,15 +1,16 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rall [-f] [-i] [-n] [-r] [-s] PKG"'
+alias help='echo "Usage: Rall [-d] [-f] [-i] [-n] [-r] [-s] PKG"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   Rall [-f] [-i] [-n] [-r] [-s] PKG                                #
+### Script:   Rall [-d] [-f] [-i] [-n] [-r] [-s] PKG                           #
 ###                                                                            #
 ### Purpose:  Roxygenize, build, check, and optionally install R package       #
 ###                                                                            #
-### Args:     f skips the check (fast build)                                   #
+### Args:     d disables data resave                                           #
+###           f skips the check (fast build)                                   #
 ###           i installs the package in the default library                    #
 ###           n builds without vignettes                                       #
 ###           r connects to remote CRAN server for a full --as-cran check      #
@@ -22,23 +23,25 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-args=
+ascran=
 check=1
 install=0
+resave=
 roxygenize=1
 vignettes=
-while getopts "finrs" A; do
+while getopts "dfinrs" A; do
   case $A in
+    d) resave=-d;;
     f) check=0;;
     i) install=1;;
     n) vignettes=-n;;
-    r) args=-r;;
+    r) ascran=-r;;
     s) roxygenize=0;;
   esac
 done
 shift $((OPTIND-1))
 
 if [[ $roxygenize == 1 ]]; then Roxy $1; fi
-Rbuild $vignettes $1
-if [[ $check == 1 ]]; then Rcheck $args $1; fi
+Rbuild $resave $vignettes $1
+if [[ $check == 1 ]]; then Rcheck $ascran $1; fi
 if [[ $install == 1 ]]; then Rinstall $1; fi
