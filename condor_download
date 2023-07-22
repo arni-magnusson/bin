@@ -1,0 +1,40 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: condor_download run1 [run2] [...]";
+            echo "       condor_download file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   condor_download run1 [run2] [...]                                #
+###           condor_download file                                             #
+###                                                                            #
+### Purpose:  Download runs from NOUOFPCALC02:condor and extract End.tar.gz    #
+###                                                                            #
+### Args:     run1 name of run directory, e.g. 01_Model_Run                    #
+###           run2 additional run directories                                  #
+###           file file containing list of run directories                     #
+###                                                                            #
+### Requires: scp, tar                                                         #
+###                                                                            #
+### Returns:  Downloads directories to current directory                       #
+###                                                                            #
+################################################################################
+
+# Determine whether user passed filename or run names
+if [[ -f $1 ]]; then
+  DIRS=$(<$1)
+else
+  DIRS=$@
+fi
+
+# Create string with commas instead of spaces
+DIRSTRING=`echo $DIRS | sed 's/ /,/g'`
+
+# Download from Condor submitter
+scp -pr NOUOFPCALC02:condor/\{$DIRSTRING\} .
+
+# Extract End.tar.gz
+for DIR in $DIRS; do
+  tar -xf $DIR/End.tar.gz -C $DIR
+done
