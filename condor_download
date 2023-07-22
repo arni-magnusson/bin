@@ -33,9 +33,10 @@ DIRSTRING=`echo $DIRS | sed 's/ /,/g'`
 
 # Download from Condor submitter
 scp -pr NOUOFPCALC02:condor/\{$DIRSTRING\} .
+echo
 
 # Extract End.tar.gz
 for DIR in $DIRS; do
-  echo Extracting $DIR/End.tar.gz
+  echo "* Extracting $DIR/End.tar.gz"
   tar -xf $DIR/End.tar.gz -C $DIR
 done
