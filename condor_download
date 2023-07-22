@@ -36,5 +36,6 @@ scp -pr NOUOFPCALC02:condor/\{$DIRSTRING\} .
 
 # Extract End.tar.gz
 for DIR in $DIRS; do
+  echo Extracting $DIR/End.tar.gz
   tar -xf $DIR/End.tar.gz -C $DIR
 done
