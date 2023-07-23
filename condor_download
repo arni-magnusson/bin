@@ -15,6 +15,10 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###           run2 additional run directories                                  #
 ###           file file containing list of run directories                     #
 ###                                                                            #
+### Notes:    Run names specified in the command line should be separated by   #
+###           space. Run names specified in a file should be separated by      #
+###           space or newline.                                                #
+###                                                                            #
 ### Requires: scp, tar                                                         #
 ###                                                                            #
 ### Returns:  Downloads directories to current directory                       #
@@ -28,11 +32,15 @@ else
   DIRS=$@
 fi
 
-# Create string with commas instead of spaces
-DIRSTRING=`echo $DIRS | sed 's/ /,/g'`
+# If directory string contains multiple entries, then
+# separate with commas and enclose in curly braces
+DIRSTRING=`echo $DIRS`
+if [[ $DIRSTRING =~ ' ' ]]; then
+  DIRSTRING={`echo $DIRS | sed 's/ /,/g'`}
+fi
 
 # Download from Condor submitter
-scp -pr NOUOFPCALC02:condor/\{$DIRSTRING\} .
+scp -pr NOUOFPCALC02:condor/$DIRSTRING .
 echo
 
 # Extract End.tar.gz
