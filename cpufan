@@ -23,7 +23,9 @@ done
 shift $((OPTIND-1))
 
 if [[ $range == 0 ]]; then
-  sensors | grep --color=never RPM | sed 's/.*\(....\) RPM/\1/'
+  sensors | grep --color=never RPM | sed 's/ RPM.*//' | \
+    sed 's/fan[0-9]: \{8\}//'
 else
-  sensors | grep --color=never RPM | sed 's/.*\(....\) RPM/\1/' | tac | paste -s
+  sensors | grep --color=never RPM | sed 's/ RPM.*//' | \
+    sed 's/fan[0-9]: \{8\}//' | tac | paste -s
 fi
