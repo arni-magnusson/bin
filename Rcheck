@@ -1,8 +1,8 @@
 #!/bin/bash
 shopt -s expand_aliases
 alias help='echo "Usage: Rcheck [-a] [-r] PKG";
-            echo "  -a runs --as-cran";
-            echo "  -r runs --as-cran and checks remotes"'
+            echo "  -a  --as-cran";
+            echo "  -r  --as-cran and check remotes"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################

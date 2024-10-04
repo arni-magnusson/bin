@@ -1,6 +1,10 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rbuild [-c] [-d] [-i] [-n] PKG"'
+alias help='echo "Usage: Rbuild [-c] [-d] [-i] [-n] PKG";
+            echo "  -c  compact twice";
+            echo "  -d  disable resave";
+            echo "  -i  install";
+            echo "  -n  no vignette"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################

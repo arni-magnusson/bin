@@ -2,7 +2,8 @@
 shopt -s expand_aliases
 alias help=\
 'echo "Usage: 2png [-a ag] [-b at] [-c colors] [-d dpi] [-g] [-m] file"; echo;
- echo "  -g  gray"; echo "  -m  mono"'
+ echo "  -g  gray";
+ echo "  -m  mono"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################

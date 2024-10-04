@@ -1,6 +1,12 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rall [-d] [-f] [-i] [-n] [-r] [-s] PKG"'
+alias help='echo "Usage: Rall [-d] [-f] [-i] [-n] [-r] [-s] PKG";
+            echo "  -d  disable resave";
+            echo "  -f  fast build";
+            echo "  -i  install";
+            echo "  -n  no vignette";
+            echo "  -r  remote check";
+            echo "  -s  skip roxygenize"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
