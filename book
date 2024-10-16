@@ -31,24 +31,24 @@ done
 shift $((OPTIND-1))
 
 # 1  Full target path and short prefix
-book=${1%.*}_book.pdf
-page=$TMPDIR/${1%.*}_page.pdf
-empty=$TMPDIR/${1%.*}_empty.pdf
+book="${1%.*}_book.pdf"
+page="$TMPDIR/${1%.*}_page.pdf"
+empty="$TMPDIR/${1%.*}_empty.pdf"
 
 # 2  Set width and height
-rm -f $page
-pdftk $1 cat $ref output $page
-if [[ -f $page ]]; then true; else echo "Consider passing -r"; exit 1; fi
-width=`pdfinfo $page | gawk '/Page size/ {print $3}'`
-height=`pdfinfo $page | gawk '/Page size/ {print $5}'`
+rm -f "$page"
+pdftk "$1" cat "$ref" output "$page"
+if [[ -f "$page" ]]; then true; else echo "Consider passing -r"; exit 1; fi
+width=`pdfinfo "$page" | gawk '/Page size/ {print $3}'`
+height=`pdfinfo "$page" | gawk '/Page size/ {print $5}'`
 
 # 3  Create _empty.pdf
 Rscript --slave -e \
 "arni::pdf.blank('$empty', as.numeric('$width')/72, as.numeric('$height')/72)"
 
 # 4  Merge book and empty page
-sejda-console merge -f $1 $empty -o $book --overwrite
+sejda-console merge -f "$1" "$empty" -o "$book" --overwrite
 
 # 5  Delete temp files
-rm $empty
-rm $page
+rm "$empty"
+rm "$page"
