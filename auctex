@@ -1,28 +1,34 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help=\
-'echo "Usage: auctex [-c(ompile)] [-v(iew)] [-s(weave)] [-p a4/letter] file"'
+alias help='echo "Usage: auctex [-c] [-k] [-p paper] [-s] [-v] [-x] file"; echo;
+            echo "  -c  compile LaTeX";
+            echo "  -k  knit Rnw";
+            echo "  -p  a4/letter";
+            echo "  -s  sweave Rnw";
+            echo "  -v  view";
+            echo "  -x  clean"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   auctex [-c] [-v] [-s] [-p paper] [-x] file                       #
+### Script:   auctex [-c] [-k] [-p paper] [-s] [-v] [-x] file                  #
 ###                                                                            #
 ### Purpose:  Compile or view LaTeX document from Emacs                        #
 ###                                                                            #
-### Args:     c converts document to PDF format                                #
-###           v invokes PDF viewer                                             #
+### Args:     c compiles LaTeX to PDF                                          #
+###           k knits Rnw to PDF                                               #
+###           p a4 (default) or letter                                         #
 ###           s sweaves Rnw to PDF                                             #
-###           paper is the paper size, a4 (default) or letter                  #
-###           x cleans intermediate LaTeX files                                #
-###           file is the TeX file in current Emacs buffer                     #
+###           v opens PDF viewer                                               #
+###           x cleans intermediate files                                      #
+###           file is the LaTeX/Rnw file                                       #
 ###                                                                            #
 ### Requires: dvips, ghostview, gs, latex, latexmk, R                          #
 ###                                                                            #
 ### Example:  C-c C-c, C-c C-v, C-c C-z                                        #
 ###                                                                            #
-### Returns:  Creates PDF file with same prefix in current directory if -c or  #
-###             -s, otherwise null                                             #
+### Returns:  Creates PDF file with same prefix in current directory if        #
+###           -c/k/s, otherwise null                                           #
 ###                                                                            #
 ################################################################################
 
