@@ -66,7 +66,8 @@ case $action in
     rm -f "${1%.*}".glo "${1%.*}".gls "${1%.*}".idx "${1%.*}".ilg "${1%.*}".ind
     rm -f "${1%.*}".lof "${1%.*}".log "${1%.*}".lot "${1%.*}".nav "${1%.*}".out
     rm -f "${1%.*}".snm "${1%.*}".toc "${1%.*}".url "${1%.*}".synctex.gz
-    rm -f "${1%.*}".bcf "${1%.*}".runxml "${1%.*}".fls "{1%.*}"blx.bib;;
+    rm -f "${1%.*}".bcf "${1%.*}".run.xml "${1%.*}".fls "{1%.*}"-blx.bib
+    rm -f "${1%.*}".fdb_latexmk;;
   compile) latex $tex; dvips $dviargs $dvi; gs $gsargs $pdf $ps;;
   help) help;;
   knit) if [[ "${1##*.}" == .tex ]]; then
