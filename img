@@ -38,6 +38,6 @@ if [[ $quiet == 1 ]]; then format=${format:3}; fi
 
 # Loop so that wildcards (*.jpg) are expanded
 for f in "$@"; do
-  identify -format "$format" $f
+  identify -format "$format" "$f"
   echo
 done
