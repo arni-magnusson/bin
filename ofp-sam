@@ -5,16 +5,35 @@ if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   ofp-sam repo                                                     #
+### Script:   ofp-sam [-s] repo                                                #
 ###                                                                            #
 ### Purpose:  Clone OFP-SAM repository by typing 'ofp-sam repo' instead of     #
 ###             'clone PacificCommunity/ofp-sam-repo' and then rename to repo  #
 ###                                                                            #
+### Args:     s creates a folder with a short name, e.g., 'diagnostic'         #
+###                                                                            #
 ### Requires: clone                                                            #
+###                                                                            #
+### Example:  c mls-2025-diagnostic                                            #
+###        :  c -s mls-2025-diagnostic                                         #
 ###                                                                            #
 ### Returns:  Clones GitHub repository to local folder and renames it          #
 ###                                                                            #
 ################################################################################
 
+shortname=0
+while getopts "s" A; do
+  case $A in
+    s) shortname=1;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [[ $shortname == 0 ]]; then
+  dest=$1
+else
+  dest=`expr "$1" : '[a-z]*-[0-9]*-\(.*\)'`
+fi
+
 clone PacificCommunity/ofp-sam-$1
-mv -v ofp-sam-$1 $1
+mv -v ofp-sam-$1 $dest
