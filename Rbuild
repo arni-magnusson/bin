@@ -1,7 +1,7 @@
 #!/bin/bash
 shopt -s expand_aliases
 alias help='echo "Usage: Rbuild [-c] [-d] [-i] [-n] PKG";
-            echo "  -c  compact twice";
+            echo "  -c  compact vignettes twice";
             echo "  -d  disable resave";
             echo "  -i  install";
             echo "  -n  no vignette"'
