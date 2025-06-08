@@ -33,8 +33,9 @@ txt="${1%.*}".txt
 from="${1##*.}"
 
 case $from in
-  doc|docx) libreoffice --headless --convert-to "txt:Text (encoded):UTF8" "$1";;
-  html    ) lynx $lynxargs $1 > $txt;;
-  pdf     ) pdftotext $userargs "$1" "$txt";;
-  ps      ) gs $gsargs $1 > $txt;;
+  doc|docx|odt)
+    libreoffice --headless --convert-to "txt:Text (encoded):UTF8" "$1";;
+  html) lynx $lynxargs $1 > $txt;;
+  pdf ) pdftotext $userargs "$1" "$txt";;
+  ps  ) gs $gsargs $1 > $txt;;
 esac
