@@ -1,15 +1,15 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Roxy PKG"'
+alias help='echo "Usage: roxy DIR"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   Roxy PKG                                                         #
+### Script:   roxy DIR                                                         #
 ###                                                                            #
 ### Purpose:  Call roxygenize without opening R first                          #
 ###                                                                            #
-### Args:     PKG is an R package directory                                    #
+### Args:     DIR is an R package directory                                    #
 ###                                                                            #
 ### Requires: R, roxygen2                                                      #
 ###                                                                            #
