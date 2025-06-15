@@ -47,7 +47,7 @@ while getopts "dfinrs" A; do
 done
 shift $((OPTIND-1))
 
-if [[ $roxygenize == 1 ]]; then Roxy $1; fi
+if [[ $roxygenize == 1 ]]; then roxy $1; fi
 Rbuild $resave $vignettes $1
 if [[ $check == 1 ]]; then Rcheck $ascran $1; fi
 if [[ $install == 1 ]]; then Rinstall $1; fi
