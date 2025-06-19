@@ -1,0 +1,22 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: drop folder"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   drop folder                                                      #
+###                                                                            #
+### Purpose:  Copy new files from main Dropbox to local machine                #
+###                                                                            #
+### Args:     folder is a folder name, e.g., notes or projects                 #
+###                                                                            #
+### Returns:  Copies files to local ~/Drop folder                              #
+###                                                                            #
+################################################################################
+
+owner="arnim:domain users"
+from="/media/arnim/kubuntu_2404/home/arnim/Dropbox/$1/"
+to="/home/arnim/Drop/$1"
+
+sudo rsync --chown="$owner" -auv "$from" "$to"
