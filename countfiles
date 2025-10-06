@@ -16,12 +16,15 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
+# If user passed dirname then analyze that,
+# otherwise subdirs in current dir
 if [[ -d $1 ]]; then
   dirlist=$1
 else
   dirlist=`find * -maxdepth 0 -type d`
 fi
 
+# If no dirs in current location then use current dir
 if [[ -z $dirlist ]]; then
   dirlist=.
 fi
