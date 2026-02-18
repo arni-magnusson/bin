@@ -28,7 +28,7 @@ done
 shift $((OPTIND-1))
 
 if [[ $range == 0 ]]; then
-  watch -n $freq -t cpustatus
+  watch -n $freq -t ~/bin/cpustatus
 else
-  watch -n $freq -t cpustatus -r
+  watch -n $freq -t ~/bin/cpustatus -r
 fi
