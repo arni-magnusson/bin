@@ -28,7 +28,7 @@ if [[ $run == 1 ]]; then
   # Roxygenize, build and install
   Rall -fi $1
   # Generate test results
-  Rcheck -f $1
+  Rcheck $1
 fi
 
 # Copy test results into package directory
