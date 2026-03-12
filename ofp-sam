@@ -1,6 +1,6 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: ofp-sam repo"'
+alias help='echo "Usage: ofp-sam [-s] repo"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
