@@ -29,11 +29,11 @@ unset depth
 sortargs=-k2
 while getopts "bd:gkms" A; do
   case $A in
-    b) units=-b;;
+    b) units=-B1;;
     d) depth=$OPTARG;;
-    g) units=--block-size=1G;;
-    k) units=-bk;;
-    m) units=-bm;;
+    g) units=-BG;;
+    k) units=-BK;;
+    m) units=-BM;;
     s) sortargs=-hr;;
   esac
 done
