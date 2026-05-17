@@ -29,6 +29,8 @@ while getopts "n" A; do
 done
 shift $((OPTIND-1))
 
+chmod 644 "$1"
+
 backupfile=$TMPDIR/clean.pdf
 clean="${1%.*}"_clean.pdf
 
