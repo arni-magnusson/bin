@@ -1,0 +1,27 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: Rpkg file.tar.gz"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   Rpkg file.tar.gz                                                 #
+###                                                                            #
+### Purpose:  Unzip, rename, and extract NAMESPACE from a built R package      #
+###                                                                            #
+###           file.tar.gz is package to operate on                             #
+###                                                                            #
+### Requires: tar                                                              #
+###                                                                            #
+### Returns:  Creates new directory containing package files and copies        #
+###             NAMESPACE file into current directory with version number      #
+###                                                                            #
+################################################################################
+
+NAME=${1%_*}
+VERSION=`expr "$1" : '.*_\(.*\).tar.gz'`
+
+tar -xzf $1
+
+cp $NAME/NAMESPACE NAMESPACE\_$VERSION
+mv $NAME $NAME\_$VERSION
