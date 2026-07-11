@@ -1,14 +1,14 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpu [-n freq] [-r]'
+alias help='echo "Usage: "cpu [-i interval] [-r]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpu [-n freq] [-r]                                               #
+### Script:   cpu [-i interval] [-r]                                           #
 ###                                                                            #
 ### Purpose:  Watch CPU speed and temperature                                  #
 ###                                                                            #
-### Args:     freq is the update interval in seconds (default 1)               #
+### Args:     interval is the update interval in seconds (default 1)           #
 ###           r shows range, only the lowest and highest value                 #
 ###                                                                            #
 ### Requires: cpustatus                                                        #
@@ -17,18 +17,18 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-freq=1
+interval=1
 range=0
-while getopts "n:r" A; do
+while getopts "i:r" A; do
   case $A in
-    n) freq=$OPTARG;;
+    i) interval=$OPTARG;;
     r) range=1;;
   esac
 done
 shift $((OPTIND-1))
 
 if [[ $range == 0 ]]; then
-  watch -n $freq -t ~/bin/cpustatus
+  watch -n $interval -t ~/bin/cpustatus
 else
-  watch -n $freq -t ~/bin/cpustatus -r
+  watch -n $interval -t ~/bin/cpustatus -r
 fi
