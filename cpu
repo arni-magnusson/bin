@@ -8,7 +8,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Purpose:  Watch CPU speed and temperature                                  #
 ###                                                                            #
-### Args:     freq determines the update interval in seconds (default 1)       #
+### Args:     freq is the update interval in seconds (default 1)               #
 ###           r shows range, only the lowest and highest value                 #
 ###                                                                            #
 ### Requires: cpustatus                                                        #
