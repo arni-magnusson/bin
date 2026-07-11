@@ -1,22 +1,25 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpumonitor [-o file]'
+alias help='echo "Usage: "cpumonitor [-n freq] [-o file]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpumonitor [-o file]                                             #
+### Script:   cpumonitor [-n freq] [-o file]                                   #
 ###                                                                            #
 ### Purpose:  Monitor CPU speed, temperature, and fan speed                    #
 ###                                                                            #
+### Args:     freq is the update interval in seconds (default 1)               #
 ### Args:     file is an output file                                           #
 ###                                                                            #
 ### Returns:  Shows CPU status updates                                         #
 ###                                                                            #
 ################################################################################
 
+freq=1
 unset file
-while getopts "o:" A; do
+while getopts "n:o:" A; do
   case $A in
+    n) freq=$OPTARG;;
     o) file=$OPTARG;;
   esac
 done
@@ -35,5 +38,5 @@ while true; do
   else
     cpustatus -s >> $file
   fi
-  sleep 1
+  sleep $freq
 done
