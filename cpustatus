@@ -1,14 +1,16 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpustatus [-r]'
+alias help='echo "Usage: "cpustatus [-h] [-r] [-s]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpustatus [-r]                                                   #
+### Script:   cpustatus [-h] [-r] [-s]                                         #
 ###                                                                            #
 ### Purpose:  Show current CPU status: speed, temperature, and possibly fans   #
 ###                                                                            #
-### Args:     r shows range, only the lowest and highest value                 #
+### Args:     h shows header that describes the single-line format             #
+###           r shows output in range format, lowest and highest value         #
+###           s shows output in single-line format                             #
 ###                                                                            #
 ### Requires: cpufan, cpuspeed, cputemp                                        #
 ###                                                                            #
@@ -16,10 +18,12 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-range=0
-while getopts "r" A; do
+format=default
+while getopts "hrs" A; do
   case $A in
-    r) range=1;;
+    h) format=header;;
+    r) format=range;;
+    s) format=single;;
   esac
 done
 shift $((OPTIND-1))
@@ -27,7 +31,7 @@ shift $((OPTIND-1))
 sensors | grep -q RPM
 rpm=$?
 
-if [[ $range == 0 ]]; then
+if [[ $format == default ]]; then
   echo "*** Speed"
   cpuspeed
   echo
@@ -38,7 +42,8 @@ if [[ $range == 0 ]]; then
     echo "*** Fan"
     cpufan
   fi
-else
+
+elif [[ $format == range ]]; then
   echo -n "Speed        "
   cpuspeed -r | sed 's/\t/  /'
   echo -n "Temperature  "
@@ -47,4 +52,22 @@ else
     echo -n "Fan          "
     cpufan -r | sed 's/\t/  /'
   fi
+
+elif [[ $format == single ]]; then
+  out=`cpuspeed | paste -s -d,`
+  out=${out},`cputemp | paste -s -d,`
+  if [[ $rpm == 0 ]]; then
+    out=${out},`cpufan | paste -s -d,`
+  fi
+  echo $out | tr -d " "
+
+elif [[ $format == header ]]; then
+  ncore=`cpuspeed | wc -l`
+  out=`seq -s, "$ncore" | sed 's/[0-9]\+/Speed&/g'`
+  out=${out},`seq -s, "$ncore" | sed 's/[0-9]\+/Temp&/g'`
+  if [[ $rpm == 0 ]]; then
+    nfan=`cpufan | wc -l`
+    out=${out},`seq -s, "$nfan" | sed 's/[0-9]\+/Fan&/g'`
+  fi
+  echo $out
 fi
