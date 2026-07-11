@@ -1,14 +1,16 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpumonitor [-i interval] [-o file] [-t]'
+alias help='echo "Usage: "cpumonitor [-d duration] [-i interval] [-o file] [-t]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpumonitor [-i interval] [-o file] [-t]                          #
+### Script:   cpumonitor [-d duration] [-i interval] [-o file] [-t]            #
 ###                                                                            #
 ### Purpose:  Monitor CPU speed, temperature, and fan speed                    #
 ###                                                                            #
-### Args:     interval is the update interval in seconds (default 1)           #
+### Args:     duration is how long the script should run in seconds            #
+###             (default is infinite)                                          #
+###           interval is the update interval in seconds (default 1)           #
 ###           file is an output file                                           #
 ###           t adds a time column                                             #
 ###                                                                            #
@@ -16,11 +18,13 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
+duration=0
 interval=1
 unset file
 time=0
-while getopts "i:o:t" A; do
+while getopts "d:i:o:t" A; do
   case $A in
+    d) duration=$OPTARG;;
     i) interval=$OPTARG;;
     o) file=$OPTARG;;
     t) time=1;;
@@ -42,6 +46,9 @@ while true; do
     echo $values
   else
     echo $values >> $file
+  fi
+  if (( $duration != 0 )) && (( $SECONDS >= $duration )); then
+    break
   fi
   sleep $interval
 done
