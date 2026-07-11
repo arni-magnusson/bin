@@ -1,0 +1,39 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: "cpumonitor [-o file]'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   cpumonitor [-o file]                                             #
+###                                                                            #
+### Purpose:  Monitor CPU speed, temperature, and fan speed                    #
+###                                                                            #
+### Args:     file is an output file                                           #
+###                                                                            #
+### Returns:  Shows CPU status updates                                         #
+###                                                                            #
+################################################################################
+
+unset file
+while getopts "o:" A; do
+  case $A in
+    o) file=$OPTARG;;
+  esac
+done
+
+# Header
+if [[ -z $file ]]; then
+  cpustatus -h
+else
+  cpustatus -h > $file
+fi
+
+# Values
+while true; do
+  if [[ -z $file ]]; then
+    cpustatus -s
+  else
+    cpustatus -s >> $file
+  fi
+  sleep 1
+done
