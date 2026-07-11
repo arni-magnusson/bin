@@ -55,19 +55,19 @@ elif [[ $format == range ]]; then
 
 elif [[ $format == single ]]; then
   out=`cpuspeed | paste -s -d,`
-  out=${out},`cputemp | paste -s -d,`
+  out=$out,`cputemp | paste -s -d,`
   if [[ $rpm == 0 ]]; then
-    out=${out},`cpufan | paste -s -d,`
+    out=$out,`cpufan | paste -s -d,`
   fi
   echo $out | tr -d " "
 
 elif [[ $format == header ]]; then
   ncore=`cpuspeed | wc -l`
   out=`seq -s, "$ncore" | sed 's/[0-9]\+/Speed&/g'`
-  out=${out},`seq -s, "$ncore" | sed 's/[0-9]\+/Temp&/g'`
+  out=$out,`seq -s, "$ncore" | sed 's/[0-9]\+/Temp&/g'`
   if [[ $rpm == 0 ]]; then
     nfan=`cpufan | wc -l`
-    out=${out},`seq -s, "$nfan" | sed 's/[0-9]\+/Fan&/g'`
+    out=$out,`seq -s, "$nfan" | sed 's/[0-9]\+/Fan&/g'`
   fi
   echo $out
 fi
