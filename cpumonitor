@@ -1,15 +1,16 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpumonitor [-n freq] [-o file]'
+alias help='echo "Usage: "cpumonitor [-n freq] [-o file] [-t]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpumonitor [-n freq] [-o file]                                   #
+### Script:   cpumonitor [-n freq] [-o file] [-t]                              #
 ###                                                                            #
 ### Purpose:  Monitor CPU speed, temperature, and fan speed                    #
 ###                                                                            #
 ### Args:     freq is the update interval in seconds (default 1)               #
-### Args:     file is an output file                                           #
+###           file is an output file                                           #
+###           t adds a time column                                             #
 ###                                                                            #
 ### Returns:  Shows CPU status updates                                         #
 ###                                                                            #
@@ -17,26 +18,30 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 
 freq=1
 unset file
-while getopts "n:o:" A; do
+time=0
+while getopts "n:o:t" A; do
   case $A in
     n) freq=$OPTARG;;
     o) file=$OPTARG;;
+    t) time=1;;
   esac
 done
 
-# Header
+header=`cpustatus -h`
+if [[ $time == 1 ]]; then header=Time,$header; fi
 if [[ -z $file ]]; then
-  cpustatus -h
+  echo $header
 else
-  cpustatus -h > $file
+  echo $header > $file
 fi
 
-# Values
 while true; do
+  values=`cpustatus -s`
+  if [[ $time == 1 ]]; then values=`date '+%H:%M:%S'`,$values; fi
   if [[ -z $file ]]; then
-    cpustatus -s
+    echo $values
   else
-    cpustatus -s >> $file
+    echo $values >> $file
   fi
   sleep $freq
 done
