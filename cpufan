@@ -10,6 +10,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Args:     r shows fan speeds side by side                                  #
 ###                                                                            #
+### Requires: sensors                                                          #
+###                                                                            #
 ### Returns:  Fan speed                                                        #
 ###                                                                            #
 ################################################################################

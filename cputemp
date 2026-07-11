@@ -10,6 +10,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Args:     r shows range, only the lowest and highest temperature           #
 ###                                                                            #
+### Requires: sensors                                                          #
+###                                                                            #
 ### Returns:  CPU temperatures                                                 #
 ###                                                                            #
 ################################################################################
