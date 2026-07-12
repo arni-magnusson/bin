@@ -1,18 +1,15 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpumonitor [-d duration] [-i interval] [-o file] [-t]'
+alias help='echo "Usage: "cpumon [-d duration] [-i interval]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpumonitor [-d duration] [-i interval] [-o file] [-t]            #
+### Script:   cpumon [-d duration] [-i interval]                               #
 ###                                                                            #
 ### Purpose:  Monitor CPU speed, temperature, and fan speed                    #
 ###                                                                            #
-### Args:     duration is how long the script should run in seconds            #
-###             (default is infinite)                                          #
+### Args:     duration is how long to monitor in seconds (default infinity)    #
 ###           interval is the update interval in seconds (default 1)           #
-###           file is an output file                                           #
-###           t adds a time column                                             #
 ###                                                                            #
 ### Returns:  Shows CPU status updates                                         #
 ###                                                                            #
@@ -20,33 +17,19 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 
 duration=0
 interval=1
-unset file
-time=0
-while getopts "d:i:o:t" A; do
+while getopts "d:i:" A; do
   case $A in
     d) duration=$OPTARG;;
     i) interval=$OPTARG;;
-    o) file=$OPTARG;;
-    t) time=1;;
   esac
 done
 
-header=`cpustatus -h`
-if [[ $time == 1 ]]; then header=Time,$header; fi
-if [[ -z $file ]]; then
-  echo $header
-else
-  echo $header > $file
-fi
+header=Time,`cpustatus -h`
+echo $header
 
 while true; do
-  values=`cpustatus -s`
-  if [[ $time == 1 ]]; then values=`date '+%H:%M:%S'`,$values; fi
-  if [[ -z $file ]]; then
-    echo $values
-  else
-    echo $values >> $file
-  fi
+  values=`date '+%H:%M:%S'`,`cpustatus -s`
+  echo $values
   if (( $duration != 0 )) && (( $SECONDS >= $duration )); then
     break
   fi
