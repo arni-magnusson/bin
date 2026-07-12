@@ -8,14 +8,14 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Purpose:  Monitor CPU speed, temperature, and fan speed                    #
 ###                                                                            #
-### Args:     duration is how long to monitor in seconds (default infinity)    #
+### Args:     duration is how long to monitor in seconds (default 300)         #
 ###           interval is the update interval in seconds (default 1)           #
 ###                                                                            #
 ### Returns:  Shows CPU status updates                                         #
 ###                                                                            #
 ################################################################################
 
-duration=0
+duration=300
 interval=1
 while getopts "d:i:" A; do
   case $A in
@@ -27,11 +27,8 @@ done
 header=Time,`cpustatus -h`
 echo $header
 
-while true; do
+while (( $SECONDS <= $duration )); do
   values=$SECONDS,`cpustatus -s`
   echo $values
-  if (( $duration != 0 )) && (( $SECONDS >= $duration )); then
-    break
-  fi
   sleep $interval
 done
