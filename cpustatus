@@ -62,9 +62,10 @@ elif [[ $format == single ]]; then
   echo $out | tr -d " "
 
 elif [[ $format == header ]]; then
-  ncore=`cpuspeed | wc -l`
-  out=`seq -s, "$ncore" | sed 's/[0-9]\+/Speed&/g'`
-  out=$out,`seq -s, "$ncore" | sed 's/[0-9]\+/Temp&/g'`
+  nspeed=`cpuspeed | wc -l`
+  ntemp=`cputemp | wc -l`
+  out=`seq -s, "$nspeed" | sed 's/[0-9]\+/Speed&/g'`
+  out=$out,`seq -s, "$ntemp" | sed 's/[0-9]\+/Temp&/g'`
   if [[ $rpm == 0 ]]; then
     nfan=`cpufan | wc -l`
     out=$out,`seq -s, "$nfan" | sed 's/[0-9]\+/Fan&/g'`
