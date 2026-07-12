@@ -6,15 +6,15 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Script:   cpustatus [-h] [-r] [-s]                                         #
 ###                                                                            #
-### Purpose:  Show current CPU status: speed, temperature, and possibly fans   #
+### Purpose:  Show current CPU frequency, temperature, and fan speed           #
 ###                                                                            #
 ### Args:     h shows header that describes the single-line format             #
 ###           r shows output in range format, lowest and highest value         #
 ###           s shows output in single-line format                             #
 ###                                                                            #
-### Requires: cpufan, cpuspeed, cputemp                                        #
+### Requires: cpufan, cpufreq, cputemp                                         #
 ###                                                                            #
-### Returns:  CPU status: speed, temperature, and possibly fan                 #
+### Returns:  CPU frequency, temperature, and fan speed                        #
 ###                                                                            #
 ################################################################################
 
@@ -32,10 +32,10 @@ sensors | grep -q RPM
 rpm=$?
 
 if [[ $format == default ]]; then
-  echo "*** Speed"
-  cpuspeed
+  echo "*** Freq"
+  cpufreq
   echo
-  echo "*** Temperature"
+  echo "*** Temp"
   cputemp
   if [[ $rpm == 0 ]]; then
     echo
@@ -44,17 +44,17 @@ if [[ $format == default ]]; then
   fi
 
 elif [[ $format == range ]]; then
-  echo -n "Speed        "
-  cpuspeed -r | sed 's/\t/  /'
-  echo -n "Temperature  "
+  echo -n "Freq    "
+  cpufreq -r | sed 's/\t/  /'
+  echo -n "Temp    "
   cputemp -r | sed 's/\t/  /'
   if [[ $rpm == 0 ]]; then
-    echo -n "Fan          "
+    echo -n "Fan   "
     cpufan -r | sed 's/\t/  /'
   fi
 
 elif [[ $format == single ]]; then
-  out=`cpuspeed | paste -s -d,`
+  out=`cpufreq | paste -s -d,`
   out=$out,`cputemp | paste -s -d,`
   if [[ $rpm == 0 ]]; then
     out=$out,`cpufan | paste -s -d,`
@@ -62,9 +62,9 @@ elif [[ $format == single ]]; then
   echo $out | tr -d " "
 
 elif [[ $format == header ]]; then
-  nspeed=`cpuspeed | wc -l`
+  nfreq=`cpufreq | wc -l`
   ntemp=`cputemp | wc -l`
-  out=`seq -s, "$nspeed" | sed 's/[0-9]\+/Speed&/g'`
+  out=`seq -s, "$nfreq" | sed 's/[0-9]\+/Freq&/g'`
   out=$out,`seq -s, "$ntemp" | sed 's/[0-9]\+/Temp&/g'`
   if [[ $rpm == 0 ]]; then
     nfan=`cpufan | wc -l`

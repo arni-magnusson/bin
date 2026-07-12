@@ -6,14 +6,14 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Script:   cpu [-i interval] [-r]                                           #
 ###                                                                            #
-### Purpose:  Watch CPU speed and temperature                                  #
+### Purpose:  Watch CPU frequency, temperature, and fan speed                  #
 ###                                                                            #
 ### Args:     interval is the update interval in seconds (default 1)           #
 ###           r shows range, only the lowest and highest value                 #
 ###                                                                            #
 ### Requires: cpustatus                                                        #
 ###                                                                            #
-### Returns:  CPU speed and temperatures                                       #
+### Returns:  CPU frequency, temperature, and fan speed                        #
 ###                                                                            #
 ################################################################################
 

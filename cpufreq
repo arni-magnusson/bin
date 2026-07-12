@@ -1,16 +1,16 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: "cpuspeed [-r]'
+alias help='echo "Usage: "cpufreq [-r]'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cpuspeed [-r]                                                    #
+### Script:   cpufreq [-r]                                                     #
 ###                                                                            #
-### Purpose:  Show current CPU speed of each core                              #
+### Purpose:  Show current CPU frequency of each core                          #
 ###                                                                            #
-### Args:     r shows range, only the lowest and highest speed                 #
+### Args:     r shows range, only the lowest and highest frequency             #
 ###                                                                            #
-### Returns:  CPU speeds                                                       #
+### Returns:  CPU frequency                                                    #
 ###                                                                            #
 ################################################################################
 

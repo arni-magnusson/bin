@@ -6,7 +6,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Script:   cpumon [-d duration] [-i interval]                               #
 ###                                                                            #
-### Purpose:  Monitor CPU speed, temperature, and fan speed                    #
+### Purpose:  Monitor CPU frequence, temperature, and fan speed                #
 ###                                                                            #
 ### Args:     duration is how long to monitor in seconds (default 300)         #
 ###           interval is the update interval in seconds (default 1)           #
