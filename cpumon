@@ -28,7 +28,7 @@ header=Time,`cpustatus -h`
 echo $header
 
 while true; do
-  values=`date '+%H:%M:%S'`,`cpustatus -s`
+  values=$SECONDS,`cpustatus -s`
   echo $values
   if (( $duration != 0 )) && (( $SECONDS >= $duration )); then
     break
