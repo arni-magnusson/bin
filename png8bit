@@ -1,0 +1,20 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: png8bit file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   png8bit file                                                     #
+###                                                                            #
+### Purpose:  Convert PNG file to use 8-bit (256 color) palette                #
+###                                                                            #
+### Args:     file is file to convert                                          #
+###                                                                            #
+### Requires: convert                                                          #
+###                                                                            #
+### Returns:  Overwrites original file with an 8-bit palette                   #
+###                                                                            #
+################################################################################
+
+mogrify -colors 256 -dither None $1
