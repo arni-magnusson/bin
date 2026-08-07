@@ -9,7 +9,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Script:   condor_download run1 [run2] [...]                                #
 ###           condor_download file                                             #
 ###                                                                            #
-### Purpose:  Download runs from NOUOFPCALC02:condor and extract End.tar.gz    #
+### Purpose:  Download runs from NOUOFPSUBMIT:condor and extract End.tar.gz    #
 ###                                                                            #
 ### Args:     run1 name of run directory, e.g. 01_Model_Run                    #
 ###           run2 additional run directories                                  #
@@ -40,7 +40,7 @@ if [[ $DIRSTRING =~ ' ' ]]; then
 fi
 
 # Download from Condor submitter
-scp -pr NOUOFPCALC02:condor/$DIRSTRING .
+scp -pr NOUOFPSUBMIT:condor/$DIRSTRING .
 echo
 
 # Extract End.tar.gz
