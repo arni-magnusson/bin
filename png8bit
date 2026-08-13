@@ -11,10 +11,11 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Args:     file is file to convert                                          #
 ###                                                                            #
-### Requires: convert                                                          #
+### Requires: convert, optipng                                                 #
 ###                                                                            #
 ### Returns:  Overwrites original file with an 8-bit palette                   #
 ###                                                                            #
 ################################################################################
 
-mogrify -colors 256 -dither None $1
+mogrify -colors 256 -dither None "$1"
+optipng "$1"
