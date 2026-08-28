@@ -1,0 +1,21 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: pngray file"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   pngray file                                                      #
+###                                                                            #
+### Purpose:  Convert PNG file to use grayscale palette                        #
+###                                                                            #
+### Args:     file is file to convert                                          #
+###                                                                            #
+### Requires: convert, optipng                                                 #
+###                                                                            #
+### Returns:  Overwrites original file with a grayscale palette                #
+###                                                                            #
+################################################################################
+
+mogrify -colorspace Gray -dither None "$1"
+optipng "$1"
