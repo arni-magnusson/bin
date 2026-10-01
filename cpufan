@@ -29,5 +29,5 @@ if [[ $range == 0 ]]; then
     sed 's/fan[0-9]: \{8\}//'
 else
   sensors | grep --color=never RPM | sed 's/ RPM.*//' | \
-    sed 's/fan[0-9]: \{8\}//' | tac | paste -s
+    sed 's/fan[0-9]: \{8\}//' | paste -s
 fi
