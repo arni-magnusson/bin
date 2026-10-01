@@ -8,14 +8,14 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Purpose:  Monitor CPU frequence, temperature, and fan speed                #
 ###                                                                            #
-### Args:     duration is how long to monitor in seconds (default 300)         #
+### Args:     duration is how long to monitor in seconds (default 400)         #
 ###           interval is the update interval in seconds (default 1)           #
 ###                                                                            #
 ### Returns:  Shows CPU status updates                                         #
 ###                                                                            #
 ################################################################################
 
-duration=300
+duration=400
 interval=1
 while getopts "d:i:" A; do
   case $A in
