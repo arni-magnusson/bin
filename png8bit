@@ -18,4 +18,4 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 
 mogrify -colors 256 -dither None "$1"
-optipng "$1"
+optipng -strip all "$1"
