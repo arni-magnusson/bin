@@ -1,15 +1,18 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: cleanboot [-f]"'
+alias help='echo "Usage: cleanboot [-s]"'
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   cleanboot [-f]                                                   #
+### Script:   cleanboot [-s]                                                   #
 ###                                                                            #
 ### Purpose:  Clean TAF bootstrap directory                                    #
 ###                                                                            #
-### Args:     f removes bootstrap/data, bootstrap/library, and                 #
-##              bootstrap/software completely                                  #
+### Args:     s keep files and subfolders that are declared, instead of        #
+###             removing data, library, and software folders completely        #
+###                                                                            #
+### Args:     s only remove files and subfolders that are not declared, rather #
+###             than removing data, library, and software folders completely   #
 ###                                                                            #
 ### Requires: R, TAF                                                           #
 ###                                                                            #
@@ -18,7 +21,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 
 if [[ -z $1 ]]; then
-  Rscript --vanilla -e "TAF::clean('boot')"
+  Rscript --vanilla -e "TAF::clean.boot(force=TRUE)"
 else
-  Rscript --vanilla -e "TAF::clean('boot', force=TRUE)"
+  Rscript --vanilla -e "TAF::clean.boot()"
 fi
