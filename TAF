@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: TAF [analysis]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   TAF [analysis]                                                   #
+###                                                                            #
+### Purpose:  Boot and run all TAF analyses, or a specific analysis            #
+###                                                                            #
+###           analysis is a folder containing a TAF analysis                   #
+###                                                                            #
+### Requires: R, TAF                                                           #
+###                                                                            #
+### Returns:  Runs analysis/analyses                                           #
+###                                                                            #
+################################################################################
+
+if [[ -z $1 ]]; then
+  cmd="sapply(dir()[dir.exists(dir())], TAF::boot.and.run, taf=TRUE)"
+else
+  cmd="TAF::boot.and.run(\"$1\", taf=TRUE)"
+fi
+
+Rscript --vanilla -e "$cmd"
