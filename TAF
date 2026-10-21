@@ -12,7 +12,7 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ### Requires: R, TAF                                                           #
 ###                                                                            #
-### Returns:  Runs analysis/analyses                                           #
+### Returns:  Runs analysis or analyses                                        #
 ###                                                                            #
 ################################################################################
 
