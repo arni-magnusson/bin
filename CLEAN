@@ -1,0 +1,25 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: CLEAN [analysis]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   CLEAN [analysis]                                                 #
+###                                                                            #
+### Purpose:  Clean all TAF analyses, or a specific analysis                   #
+###                                                                            #
+###           analysis is a folder containing a TAF analysis                   #
+###                                                                            #
+### Requires: R, TAF                                                           #
+###                                                                            #
+### Returns:  Cleans analysis or analyses                                      #
+###                                                                            #
+################################################################################
+
+if [[ -z $1 ]]; then
+  cmd="sapply(dir()[dir.exists(dir())], TAF::clean.analysis)"
+else
+  cmd="TAF::clean.analysis(\"$1\")"
+fi
+
+Rscript --vanilla -e "$cmd"
