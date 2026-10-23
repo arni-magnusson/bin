@@ -16,9 +16,11 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-if [[ -z $1 ]]; then
+if [[ -z $1 && ! -d boot ]]; then  # no arg, no boot => many analyses
   cmd="sapply(dir()[dir.exists(dir())], TAF::clean.analysis)"
-else
+elif [[ -z $1 && -d boot ]]; then  # no arg, yes boot => current analysis
+  cmd="TAF::clean.analysis()"
+else                               # arg => user specified analysis
   cmd="TAF::clean.analysis(\"$1\")"
 fi
 
