@@ -1,0 +1,27 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: skeleton [analysis]"'
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   skeleton [analysis]                                              #
+###                                                                            #
+### Purpose:  Create a new TAF analysis                                        #
+###                                                                            #
+###           analysis is a folder to contain the TAF analysis                 #
+###                                                                            #
+### Requires: R, TAF                                                           #
+###                                                                            #
+### Returns:  Create analysis                                                  #
+###                                                                            #
+################################################################################
+
+if [[ -z $1 ]]; then  # no arg => current folder
+  cmd="TAF::taf.skeleton()"
+else                  # arg => create new folder
+  mkdir $1
+  cd $1
+  cmd="TAF::taf.skeleton()"
+fi
+
+Rscript --vanilla -e "$cmd"
