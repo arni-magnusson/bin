@@ -11,6 +11,8 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ### Args:     duration is how long to monitor in seconds (default 400)         #
 ###           interval is the update interval in seconds (default 1)           #
 ###                                                                            #
+### Requires: cpustatus                                                        #
+###                                                                            #
 ### Returns:  Shows CPU status updates                                         #
 ###                                                                            #
 ################################################################################
