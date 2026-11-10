@@ -38,7 +38,7 @@ empty="$TMPDIR/${1%.*}_empty.pdf"
 # 2  Set width and height
 rm -f "$page"
 pdftk "$1" cat "$ref" output "$page"
-if [[ -f "$page" ]]; then true; else echo "Consider passing -r"; exit 1; fi
+if [[ ! -f "$page" ]]; then echo "Consider passing -r"; exit 1; fi
 width=`pdfinfo "$page" | gawk '/Page size/ {print $3}'`
 height=`pdfinfo "$page" | gawk '/Page size/ {print $5}'`
 
