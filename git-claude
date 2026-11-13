@@ -15,4 +15,5 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-git commit -m "$1" --trailer "Co-Authored-By: Claude <noreply@anthropic.com>"
+git commit -m "$1" --trailer "Co-Authored-By: Claude <noreply@anthropic.com>" \
+           --amend
