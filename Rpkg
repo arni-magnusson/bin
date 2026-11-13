@@ -1,14 +1,15 @@
 #!/bin/bash
 shopt -s expand_aliases
-alias help='echo "Usage: Rpkg file.tar.gz"'
+alias help='echo "Usage: Rpkg [-z] file.tar.gz"'
 if [[ "$1" == "" ]]; then help; exit; fi
 if [[ "$1" == "--help" ]]; then help; exit; fi
 ################################################################################
 ###                                                                            #
-### Script:   Rpkg file.tar.gz                                                 #
+### Script:   Rpkg [-z] file.tar.gz                                            #
 ###                                                                            #
 ### Purpose:  Unzip, rename, and extract NAMESPACE from a built R package      #
 ###                                                                            #
+### Args:     z only unzips and renames folder but does not copy NAMESPACE     #
 ###           file.tar.gz is package to operate on                             #
 ###                                                                            #
 ### Requires: tar                                                              #
@@ -18,10 +19,20 @@ if [[ "$1" == "--help" ]]; then help; exit; fi
 ###                                                                            #
 ################################################################################
 
-NAME=${1%_*}
-VERSION=`expr "$1" : '.*_\(.*\).tar.gz'`
+namespace=1
+while getopts "z" A; do
+  case $A in
+    z) namespace=0;;
+  esac
+done
+shift $((OPTIND-1))
+
+folder=${1%_*}
+version=`expr "$1" : '.*_\(.*\).tar.gz'`
 
 tar -xzf $1
+mv $folder ${folder}_$version
 
-cp $NAME/NAMESPACE NAMESPACE\_$VERSION
-mv $NAME $NAME\_$VERSION
+if (( namespace == 1 )); then
+  cp ${folder}_$version/NAMESPACE NAMESPACE_$version
+fi
