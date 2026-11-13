@@ -1,0 +1,18 @@
+#!/bin/bash
+shopt -s expand_aliases
+alias help='echo "Usage: git-claude MSG"'
+if [[ "$1" == "" ]]; then help; exit; fi
+if [[ "$1" == "--help" ]]; then help; exit; fi
+################################################################################
+###                                                                            #
+### Script:   git-claude MSG                                                   #
+###                                                                            #
+### Purpose:  Create Git commit with a Claude coauthor trailer                 #
+###                                                                            #
+### Args:     MSG is the main commit message                                   #
+###                                                                            #
+### Returns:  Creates a Git commit, ready to be pushed                         #
+###                                                                            #
+################################################################################
+
+git commit -m "$1" --trailer "Co-Authored-By: Claude <noreply@anthropic.com>"
